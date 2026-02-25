@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SmartNotificationService.swift</title>
+<style>
+@page { size: A4; margin: 1.5cm; }
+body {
+    font-family: 'Menlo', 'Courier New', monospace;
+    font-size: 9.5pt;
+    line-height: 1.4;
+    color: #1a1a1a;
+    background: #fff;
+    margin: 0;
+    padding: 20px;
+}
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+}
+.header {
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 11pt;
+    color: #666;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+</style>
+</head>
+<body>
+<div class="header">SmartNotificationService.swift — Activity-Aware Intelligent Notification System</div>
+<pre>//
+//  SmartNotificationService.swift
+//
+//  Activity-aware intelligent notification system that learns from user behavior.
+//  Adapts notification timing based on activity category and user&#x27;s daily rhythm.
+//
+//  Extracted from a production iOS app. Domain-specific models (Activity, CheckIn,
+//  UserPreferences) are referenced but not included — the value is in the
+//  scheduling algorithm, behavior learning, and engagement modulation.
+//
+
+import Foundation
+import UserNotifications
+import SwiftData
+
+/// Activity-Aware Intelligent Notification System
+///
+/// Replaces fixed-interval notifications with behavior-based, context-aware scheduling.
+///
+/// ## Notification Windows:
+/// - `eveningOnly`: Evening-specific activities (7 PM - 10 PM only)
+/// - `morningOrEvening`: Time-sensitive activities (learns from user behavior)
+/// - `throughoutDay`: Flexible activities (8 AM - 10 PM)
+/// - `flexible`: Prefer morning/evening but adaptable
+///
+/// ## User Behavior Learning:
+/// - Tracks first 3-5 interactions to determine morning/evening preference
+/// - Adapts notification timing based on learned pattern
+/// - Respects user&#x27;s natural rhythm
+///
+/// ## Dependencies (not included — app-specific):
+/// - `Activity`: has `.title`, `.category`, `.dailyProgress`, `.lastCheckInDate`
+/// - `CheckIn`: has `.createdAt`
+/// - `UserPreferences`: persists engagement pattern, quiet hours, response history
+///
+@MainActor
+class SmartNotificationService {
+    static let shared = SmartNotificationService()
+
+    private init() {
+        setupNotificationCategories()
+    }
+
+    // MARK: - Notification Categories Setup
+
+    private func setupNotificationCategories() {
+        let checkInAction = UNNotificationAction(
+            identifier: &quot;CHECK_IN_ACTION&quot;,
+            title: &quot;Check-in&quot;,
+            options: [.foreground]
+        )
+
+        let checkInCategory = UNNotificationCategory(
+            identifier: &quot;CHECK_IN&quot;,
+            actions: [checkInAction],
+            intentIdentifiers: [],
+            options: [.customDismissAction]
+        )
+
+        UNUserNotificationCenter.current().setNotificationCategories([checkInCategory])
+    }
+
+    // MARK: - Authorization
+
+    func requestAuthorization() async {
+        do {
+            let granted = try await UNUserNotificationCenter.current()
+                .requestAuthorization(options: [.alert, .sound, .badge])
+            if granted {
+                print(&quot;Notification authorization granted&quot;)
+            }
+        } catch {
+            print(&quot;Notification authorization error: \(error)&quot;)
+        }
+    }
+
+    // MARK: - Cancel All Notifications
+
+    func cancelAllNotifications() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+    }
+
+    // MARK: - Activity-Specific Notification Windows
+
+    enum NotificationWindow {
+        case eveningOnly      // Evening activities: 7 PM - 10 PM only (NEVER morning)
+        case morningOnly      // Morning-only activities
+        case morningOrEvening // Time-sensitive: learn from behavior
+        case throughoutDay    // Flexible: 8 AM - 10 PM
+        case flexible         // Prefer morning/evening but adaptable
+    }
+
+    /// Determine notification window based on activity category.
+    ///
+    /// Each activity is tagged with a category at creation time. The category
+    /// drives which time-of-day window is appropriate. This prevents nonsensical
+    /// notifications (e.g. an evening-only activity getting a 7 AM reminder).
+    ///
+    /// In production, the category-to-window mapping is loaded from a config
+    /// file so product can tune it without code changes. The logic below shows
+    /// the classification structure.
+    func getNotificationWindow(for category: ActivityCategory) -&gt; NotificationWindow {
+        switch category {
+        case .eveningRoutine:
+            // Activities that only make sense in the evening (7 PM - 10 PM).
+            // CRITICAL: never send morning notifications for this category.
+            return .eveningOnly
+
+        case .morningRoutine:
+            return .morningOnly
+
+        case .timeSensitive:
+            // Activities users typically do at a consistent time of day.
+            // The system learns whether the user prefers morning or evening
+            // from their first 3-5 check-ins.
+            return .morningOrEvening
+
+        case .anytime:
+            // Activities that can be performed throughout the day (8 AM - 10 PM).
+            return .throughoutDay
+
+        case .structured:
+            // Activities that benefit from a schedule but are flexible.
+            // Prefer morning/evening but midday is acceptable.
+            return .flexible
+        }
+    }
+
+    /// Activity categories that drive notification window selection.
+    /// Each activity is assigned a category when created.
+    enum ActivityCategory {
+        case eveningRoutine   // e.g. wind-down, bedtime activities
+        case morningRoutine   // e.g. wake-up rituals
+        case timeSensitive    // activities done at a consistent time of day
+        case anytime          // can happen throughout the day
+        case structured       // prefer morning/evening but adaptable
+    }
+
+    // MARK: - User Behavior Learning
+
+    /// Learn user&#x27;s engagement pattern from check-in history.
+    ///
+    /// Analyzes timestamps of recent check-ins to classify the user as a
+    /// &quot;morning&quot;, &quot;evening&quot;, or &quot;flexible&quot; person. Requires at least 3 data
+    /// points before making a determination.
+    func learnUserPattern(from checkIns: [CheckIn], preferences: UserPreferences) {
+        guard checkIns.count &gt;= 3 else { return }
+
+        let morningCheckIns = checkIns.filter { checkIn in
+            let hour = Calendar.current.component(.hour, from: checkIn.createdAt)
+            return hour &gt;= 6 &amp;&amp; hour &lt; 12
+        }
+
+        let eveningCheckIns = checkIns.filter { checkIn in
+            let hour = Calendar.current.component(.hour, from: checkIn.createdAt)
+            return hour &gt;= 17 &amp;&amp; hour &lt; 22
+        }
+
+        if morningCheckIns.count &gt; eveningCheckIns.count &amp;&amp; morningCheckIns.count &gt;= 2 {
+            preferences.userEngagementPattern = &quot;morning&quot;
+            if let firstMorning = morningCheckIns.first {
+                preferences.typicalCheckInHour = Calendar.current.component(.hour, from: firstMorning.createdAt)
+                preferences.typicalCheckInMinute = Calendar.current.component(.minute, from: firstMorning.createdAt)
+            }
+        } else if eveningCheckIns.count &gt; morningCheckIns.count &amp;&amp; eveningCheckIns.count &gt;= 2 {
+            preferences.userEngagementPattern = &quot;evening&quot;
+            if let firstEvening = eveningCheckIns.first {
+                preferences.typicalCheckInHour = Calendar.current.component(.hour, from: firstEvening.createdAt)
+                preferences.typicalCheckInMinute = Calendar.current.component(.minute, from: firstEvening.createdAt)
+            }
+        } else {
+            preferences.userEngagementPattern = &quot;flexible&quot;
+        }
+
+        // Store recent check-in times (last 10) for pattern analysis
+        let recentCheckIns = checkIns.sorted { $0.createdAt &gt; $1.createdAt }.prefix(10)
+        preferences.checkInTimesAsDates = Array(recentCheckIns.map { $0.createdAt })
+
+        preferences.updatedAt = Date()
+        preferences.version += 1
+    }
+
+    // MARK: - Smart Notification Timing
+
+    /// Determine notification hours based on window, user pattern, and engagement.
+    ///
+    /// This is the core scheduling algorithm. It cross-references:
+    /// 1. Activity type (which window is appropriate)
+    /// 2. User&#x27;s learned rhythm (morning vs evening person)
+    /// 3. Current progress (no reminders if complete)
+    /// 4. Engagement level (fewer reminders for active users)
+    func determineNotificationTimes(
+        window: NotificationWindow,
+        userPattern: String?,
+        progress: Int,
+        engagementLevel: EngagementLevel,
+        activityTitle: String?
+    ) -&gt; [Int] { // Returns array of hours (0-23)
+
+        switch window {
+        case .eveningOnly:
+            if progress == 0 {
+                return [19, 21]
+            } else if progress &lt; 100 {
+                return [20]
+            } else {
+                return []
+            }
+
+        case .morningOnly:
+            if progress == 0 {
+                return [7, 8]
+            } else if progress &lt; 100 {
+                return [8]
+            } else {
+                return []
+            }
+
+        case .morningOrEvening:
+            // Adapt to learned user pattern
+            if let pattern = userPattern {
+                if pattern == &quot;morning&quot; {
+                    return progress == 0 ? [7, 8] : (progress &lt; 100 ? [8] : [])
+                } else if pattern == &quot;evening&quot; {
+                    return progress == 0 ? [19, 20] : (progress &lt; 100 ? [20] : [])
+                }
+            }
+
+            // Unknown pattern: try both, modulate by engagement
+            if progress == 0 {
+                return [8, 20]
+            } else if progress &lt; 100 {
+                switch engagementLevel {
+                case .highlyActive:
+                    return []
+                case .active, .moderate:
+                    return [20]
+                case .inactive:
+                    return [9, 20]
+                }
+            } else {
+                return []
+            }
+
+        case .throughoutDay:
+            switch engagementLevel {
+            case .highlyActive:
+                return progress == 0 ? [14] : []
+            case .active:
+                return progress == 0 ? [9, 14] : [14]
+            case .moderate:
+                return progress == 0 ? [9, 14, 19] : [14, 19]
+            case .inactive:
+                return progress == 0 ? [9, 12, 15, 19] : [12, 15, 19]
+            }
+
+        case .flexible:
+            if let pattern = userPattern {
+                if pattern == &quot;morning&quot; {
+                    return progress == 0 ? [8, 14] : [14]
+                } else if pattern == &quot;evening&quot; {
+                    return progress == 0 ? [14, 20] : [20]
+                }
+            }
+            return progress == 0 ? [9, 14, 20] : [14, 20]
+        }
+    }
+
+    // MARK: - Engagement Level Detection
+
+    enum EngagementLevel {
+        case highlyActive  // Checks in daily
+        case active        // Most days
+        case moderate      // 3-4 days per week
+        case inactive      // &lt; 3 days per week or 2+ days absent
+    }
+
+    /// Classify engagement from recent activity.
+    ///
+    /// Uses two signals: days since last app launch (recency) and
+    /// count of check-ins in the trailing 7-day window (frequency).
+    func getEngagementLevel(activity: Activity?, preferences: UserPreferences) -&gt; EngagementLevel {
+        guard activity != nil else { return .moderate }
+
+        let daysSinceLaunch = preferences.daysSinceLastLaunch
+        if daysSinceLaunch &gt;= 2 {
+            return .inactive
+        }
+
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let recentCheckIns = preferences.checkInTimesAsDates.filter { $0 &gt;= sevenDaysAgo }
+
+        if recentCheckIns.count &gt;= 6 {
+            return .highlyActive
+        } else if recentCheckIns.count &gt;= 4 {
+            return .active
+        } else if recentCheckIns.count &gt;= 2 {
+            return .moderate
+        } else {
+            return .inactive
+        }
+    }
+
+    // MARK: - Notification Response Learning
+
+    /// Track that user opened the app within 1 hour of a notification at this time.
+    func trackNotificationResponse(hour: Int, minute: Int, preferences: UserPreferences) {
+        let key = &quot;\(hour)_\(minute)&quot;
+        let currentCount = preferences.notificationResponseHistory[key] ?? 0
+        preferences.notificationResponseHistory[key] = currentCount + 1
+        preferences.updatedAt = Date()
+        preferences.version += 1
+    }
+
+    /// Return notification times with 3+ tracked responses (proven effective).
+    func getEffectiveNotificationTimes(preferences: UserPreferences) -&gt; [String] {
+        return preferences.notificationResponseHistory
+            .filter { $0.value &gt;= 3 }
+            .map { $0.key }
+            .sorted()
+    }
+
+    // MARK: - Validation Gate
+
+    /// Multi-layered validation: checks activity window, quiet hours, recency,
+    /// and ignored-time list before allowing a notification to be scheduled.
+    func shouldSendNotification(
+        activity: Activity?,
+        hour: Int,
+        preferences: UserPreferences
+    ) -&gt; Bool {
+        guard preferences.notificationsEnabled else { return false }
+
+        // Already complete — no reminder needed
+        if let activity = activity, activity.dailyProgress &gt;= 100 {
+            return false
+        }
+
+        // Activity-specific time-of-day validation
+        if let activity = activity {
+            let window = getNotificationWindow(for: activity.category)
+
+            switch window {
+            case .eveningOnly:
+                if hour &lt; 19 || hour &gt; 22 { return false }
+            case .morningOrEvening:
+                let isMorning = hour &gt;= 6 &amp;&amp; hour &lt; 9
+                let isEvening = hour &gt;= 18 &amp;&amp; hour &lt; 21
+                if !isMorning &amp;&amp; !isEvening {
+                    if let pattern = preferences.userEngagementPattern {
+                        if pattern == &quot;morning&quot; &amp;&amp; !isMorning { return false }
+                        if pattern == &quot;evening&quot; &amp;&amp; !isEvening { return false }
+                    }
+                    if hour &gt;= 12 &amp;&amp; hour &lt; 17 { return false }
+                }
+            default:
+                break
+            }
+        }
+
+        // Don&#x27;t remind if user checked in within the last hour
+        if let activity = activity,
+           let lastCheckIn = activity.lastCheckInDate,
+           Date().timeIntervalSince(lastCheckIn) &lt; 3600 {
+            return false
+        }
+
+        // Quiet hours
+        if preferences.quietHoursEnabled {
+            if hour &gt;= preferences.quietHoursStart || hour &lt; preferences.quietHoursEnd {
+                return false
+            }
+        }
+
+        // Ignored times (user consistently doesn&#x27;t respond)
+        if preferences.ignoredNotificationTimes.contains(&quot;\(hour)_0&quot;) {
+            return false
+        }
+
+        // General bounds: 6 AM – 10 PM
+        if hour &lt; 6 || hour &gt; 22 { return false }
+
+        return true
+    }
+
+    // MARK: - Smart Scheduling (Orchestrator)
+
+    /// Top-level entry point: computes window, pattern, engagement, timing,
+    /// validates each hour, then schedules the surviving set.
+    func scheduleSmartNotifications(
+        activity: Activity?,
+        preferences: UserPreferences,
+        context: ModelContext
+    ) async {
+        guard preferences.notificationsEnabled else {
+            cancelAllNotifications()
+            return
+        }
+
+        guard let activity = activity else {
+            await scheduleReEngagementNotifications(preferences: preferences)
+            return
+        }
+
+        let window = getNotificationWindow(for: activity.category)
+        let userPattern = preferences.userEngagementPattern
+        let progress = activity.dailyProgress
+        let engagementLevel = getEngagementLevel(activity: activity, preferences: preferences)
+
+        let candidateHours = determineNotificationTimes(
+            window: window,
+            userPattern: userPattern,
+            progress: progress,
+            engagementLevel: engagementLevel,
+            activityTitle: activity.title
+        )
+
+        let validHours = candidateHours.filter { hour in
+            shouldSendNotification(activity: activity, hour: hour, preferences: preferences)
+        }
+
+        await scheduleNotifications(hours: validHours, activity: activity, preferences: preferences)
+    }
+
+    // MARK: - Re-Engagement Notifications
+
+    /// Schedule gentle re-engagement notifications when user has no active activity.
+    private func scheduleReEngagementNotifications(preferences: UserPreferences) async {
+        let center = UNUserNotificationCenter.current()
+
+        // Clear existing re-engagement notifications
+        let requests = await center.pendingNotificationRequests()
+        let ids = requests
+            .filter { $0.identifier.hasPrefix(&quot;smartCheckIn&quot;) || $0.identifier.hasPrefix(&quot;reEngage&quot;) }
+            .map { $0.identifier }
+        if !ids.isEmpty {
+            center.removePendingNotificationRequests(withIdentifiers: ids)
+            try? await Task.sleep(for: .milliseconds(100))
+        }
+
+        // Determine best hour based on learned pattern; default to evening
+        let hour: Int
+        if let pattern = preferences.userEngagementPattern {
+            hour = (pattern == &quot;morning&quot;) ? 8 : 20
+        } else {
+            hour = 20
+        }
+
+        var dateComponents = DateComponents()
+        dateComponents.hour = hour
+        dateComponents.minute = 0
+
+        let content = UNMutableNotificationContent()
+        content.title = &quot;Ready to start?&quot;
+        content.body = Self.timeGreeting(hour: hour) + &quot;! Your next activity is waiting.&quot;
+        content.sound = .default
+        content.categoryIdentifier = &quot;CHECK_IN&quot;
+        content.userInfo = [&quot;notificationType&quot;: &quot;reEngage&quot;, &quot;hour&quot;: hour]
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let request = UNNotificationRequest(identifier: &quot;reEngage_\(hour)&quot;, content: content, trigger: trigger)
+
+        do {
+            try await center.add(request)
+        } catch {
+            print(&quot;Failed to schedule re-engagement notification: \(error)&quot;)
+        }
+    }
+
+    // MARK: - Schedule Concrete Notifications
+
+    private func scheduleNotifications(
+        hours: [Int],
+        activity: Activity?,
+        preferences: UserPreferences
+    ) async {
+        let center = UNUserNotificationCenter.current()
+
+        // Remove previously-scheduled smart notifications
+        let existing = await center.pendingNotificationRequests()
+        let ids = existing.filter { $0.identifier.hasPrefix(&quot;smartCheckIn&quot;) }.map { $0.identifier }
+        if !ids.isEmpty {
+            center.removePendingNotificationRequests(withIdentifiers: ids)
+            try? await Task.sleep(for: .milliseconds(100))
+        }
+
+        let activityTitle = activity?.title ?? &quot;Your Activity&quot;
+        let progress = activity?.dailyProgress ?? 0
+
+        for (index, hour) in hours.enumerated() {
+            var dateComponents = DateComponents()
+            dateComponents.hour = hour
+            dateComponents.minute = 0
+
+            let content = UNMutableNotificationContent()
+            content.title = activityTitle
+            content.body = Self.progressMessage(progress: progress, hour: hour)
+            content.sound = .default
+            content.categoryIdentifier = &quot;CHECK_IN&quot;
+            content.userInfo = [
+                &quot;activityTitle&quot;: activityTitle,
+                &quot;dailyProgress&quot;: progress,
+                &quot;notificationType&quot;: &quot;smartCheckIn&quot;,
+                &quot;hour&quot;: hour
+            ]
+
+            if #available(iOS 15.0, *) {
+                content.threadIdentifier = &quot;activity-checkin&quot;
+            }
+
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+            let identifier = &quot;smartCheckIn_\(hour)_\(index)&quot;
+            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
+            do {
+                try await center.add(request)
+            } catch {
+                print(&quot;Failed to schedule notification \(identifier): \(error)&quot;)
+            }
+        }
+    }
+
+    // MARK: - Helpers
+
+    private static func timeGreeting(hour: Int) -&gt; String {
+        if hour &gt;= 6 &amp;&amp; hour &lt; 12 { return &quot;Good morning&quot; }
+        if hour &gt;= 12 &amp;&amp; hour &lt; 17 { return &quot;Good afternoon&quot; }
+        return &quot;Good evening&quot;
+    }
+
+    private static func progressMessage(progress: Int, hour: Int) -&gt; String {
+        let greeting = timeGreeting(hour: hour)
+        switch progress {
+        case 0:       return &quot;\(greeting)! Ready to get started today?&quot;
+        case 1..&lt;25:  return &quot;You&#x27;re at \(progress)%. Keep the momentum going!&quot;
+        case 25..&lt;50: return &quot;Nice progress at \(progress)%! Ready to continue?&quot;
+        case 50..&lt;75: return &quot;You&#x27;re at \(progress)%! Almost there.&quot;
+        case 75..&lt;100: return &quot;So close at \(progress)%! Finish strong.&quot;
+        default:      return &quot;Great work today!&quot;
+        }
+    }
+}
+</pre>
+</body>
+</html>

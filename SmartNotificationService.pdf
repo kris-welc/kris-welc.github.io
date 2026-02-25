@@ -1,0 +1,1227 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R] /Count 8 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 3670 >>
+stream
+BT
+/F1 8 Tf
+40 792 Td
+(//) Tj
+0 -10 Td
+(//  SmartNotificationService.swift) Tj
+0 -10 Td
+(//) Tj
+0 -10 Td
+(//  Activity-aware intelligent notification system that learns from user behavior.) Tj
+0 -10 Td
+(//  Adapts notification timing based on activity category and user's daily rhythm.) Tj
+0 -10 Td
+(//) Tj
+0 -10 Td
+(//  Extracted from a production iOS app. Domain-specific models \(Activity, Interaction,) Tj
+0 -10 Td
+(//  UserPreferences\) are referenced but not included -- the value is in the) Tj
+0 -10 Td
+(//  scheduling algorithm, behavior learning, and engagement modulation.) Tj
+0 -10 Td
+(//) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(import Foundation) Tj
+0 -10 Td
+(import UserNotifications) Tj
+0 -10 Td
+(import SwiftData) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(/// Activity-Aware Intelligent Notification System) Tj
+0 -10 Td
+(///) Tj
+0 -10 Td
+(/// Replaces fixed-interval notifications with behavior-based, context-aware scheduling.) Tj
+0 -10 Td
+(///) Tj
+0 -10 Td
+(/// ## Notification Windows:) Tj
+0 -10 Td
+(/// - `eveningOnly`: Evening-specific activities \(7 PM - 10 PM only\)) Tj
+0 -10 Td
+(/// - `morningOrEvening`: Time-sensitive activities \(learns from user behavior\)) Tj
+0 -10 Td
+(/// - `throughoutDay`: Flexible activities \(8 AM - 10 PM\)) Tj
+0 -10 Td
+(/// - `flexible`: Prefer morning/evening but adaptable) Tj
+0 -10 Td
+(///) Tj
+0 -10 Td
+(/// ## User Behavior Learning:) Tj
+0 -10 Td
+(/// - Tracks first 3-5 interactions to determine morning/evening preference) Tj
+0 -10 Td
+(/// - Adapts notification timing based on learned pattern) Tj
+0 -10 Td
+(/// - Respects user's natural rhythm) Tj
+0 -10 Td
+(///) Tj
+0 -10 Td
+(/// ## Dependencies \(not included -- app-specific\):) Tj
+0 -10 Td
+(/// - `Activity`: has `.title`, `.category`, `.dailyProgress`, `.lastInteractionDate`) Tj
+0 -10 Td
+(/// - `Interaction`: has `.createdAt`) Tj
+0 -10 Td
+(/// - `UserPreferences`: persists engagement pattern, quiet hours, response history) Tj
+0 -10 Td
+(///) Tj
+0 -10 Td
+(@MainActor) Tj
+0 -10 Td
+(class SmartNotificationService {) Tj
+0 -10 Td
+(    static let shared = SmartNotificationService\(\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    private init\(\) {) Tj
+0 -10 Td
+(        setupNotificationCategories\(\)) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Notification Categories Setup) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    private func setupNotificationCategories\(\) {) Tj
+0 -10 Td
+(        let engageAction = UNNotificationAction\() Tj
+0 -10 Td
+(            identifier: "ENGAGE_ACTION",) Tj
+0 -10 Td
+(            title: "Open",) Tj
+0 -10 Td
+(            options: [.foreground]) Tj
+0 -10 Td
+(        \)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let engageCategory = UNNotificationCategory\() Tj
+0 -10 Td
+(            identifier: "ENGAGE",) Tj
+0 -10 Td
+(            actions: [engageAction],) Tj
+0 -10 Td
+(            intentIdentifiers: [],) Tj
+0 -10 Td
+(            options: [.customDismissAction]) Tj
+0 -10 Td
+(        \)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        UNUserNotificationCenter.current\(\).setNotificationCategories\([engageCategory]\)) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Authorization) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    func requestAuthorization\(\) async {) Tj
+0 -10 Td
+(        do {) Tj
+0 -10 Td
+(            let granted = try await UNUserNotificationCenter.current\(\)) Tj
+0 -10 Td
+(                .requestAuthorization\(options: [.alert, .sound, .badge]\)) Tj
+0 -10 Td
+(            if granted {) Tj
+0 -10 Td
+(                print\("Notification authorization granted"\)) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+(        } catch {) Tj
+0 -10 Td
+(            print\("Notification authorization error: \\\(error\)"\)) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+ET
+
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 4169 >>
+stream
+BT
+/F1 8 Tf
+40 792 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Cancel All Notifications) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    func cancelAllNotifications\(\) {) Tj
+0 -10 Td
+(        UNUserNotificationCenter.current\(\).removeAllPendingNotificationRequests\(\)) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Activity-Specific Notification Windows) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    enum NotificationWindow {) Tj
+0 -10 Td
+(        case eveningOnly      // Evening activities: 7 PM - 10 PM only \(NEVER morning\)) Tj
+0 -10 Td
+(        case morningOnly      // Morning-only activities) Tj
+0 -10 Td
+(        case morningOrEvening // Time-sensitive: learn from behavior) Tj
+0 -10 Td
+(        case throughoutDay    // Flexible: 8 AM - 10 PM) Tj
+0 -10 Td
+(        case flexible         // Prefer morning/evening but adaptable) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Determine notification window based on activity category.) Tj
+0 -10 Td
+(    ///) Tj
+0 -10 Td
+(    /// Each activity is tagged with a category at creation time. The category) Tj
+0 -10 Td
+(    /// drives which time-of-day window is appropriate. This prevents nonsensical) Tj
+0 -10 Td
+(    /// notifications \(e.g. an evening-only activity getting a 7 AM reminder\).) Tj
+0 -10 Td
+(    ///) Tj
+0 -10 Td
+(    /// In production, the category-to-window mapping is loaded from a config) Tj
+0 -10 Td
+(    /// file so product can tune it without code changes. The logic below shows) Tj
+0 -10 Td
+(    /// the classification structure.) Tj
+0 -10 Td
+(    func getNotificationWindow\(for category: ActivityCategory\) -> NotificationWindow {) Tj
+0 -10 Td
+(        switch category {) Tj
+0 -10 Td
+(        case .eveningRoutine:) Tj
+0 -10 Td
+(            // Activities that only make sense in the evening \(7 PM - 10 PM\).) Tj
+0 -10 Td
+(            // CRITICAL: never send morning notifications for this category.) Tj
+0 -10 Td
+(            return .eveningOnly) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        case .morningRoutine:) Tj
+0 -10 Td
+(            return .morningOnly) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        case .timeSensitive:) Tj
+0 -10 Td
+(            // Activities users typically do at a consistent time of day.) Tj
+0 -10 Td
+(            // The system learns whether the user prefers morning or evening) Tj
+0 -10 Td
+(            // from their first 3-5 interactions.) Tj
+0 -10 Td
+(            return .morningOrEvening) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        case .anytime:) Tj
+0 -10 Td
+(            // Activities that can be performed throughout the day \(8 AM - 10 PM\).) Tj
+0 -10 Td
+(            return .throughoutDay) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        case .structured:) Tj
+0 -10 Td
+(            // Activities that benefit from a schedule but are flexible.) Tj
+0 -10 Td
+(            // Prefer morning/evening but midday is acceptable.) Tj
+0 -10 Td
+(            return .flexible) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Activity categories that drive notification window selection.) Tj
+0 -10 Td
+(    /// Each activity is assigned a category when created.) Tj
+0 -10 Td
+(    enum ActivityCategory {) Tj
+0 -10 Td
+(        case eveningRoutine   // e.g. wind-down, bedtime activities) Tj
+0 -10 Td
+(        case morningRoutine   // e.g. wake-up rituals) Tj
+0 -10 Td
+(        case timeSensitive    // activities done at a consistent time of day) Tj
+0 -10 Td
+(        case anytime          // can happen throughout the day) Tj
+0 -10 Td
+(        case structured       // prefer morning/evening but adaptable) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - User Behavior Learning) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Learn user's engagement pattern from interaction history.) Tj
+0 -10 Td
+(    ///) Tj
+0 -10 Td
+(    /// Analyzes timestamps of recent interactions to classify the user as a) Tj
+0 -10 Td
+(    /// "morning", "evening", or "flexible" person. Requires at least 3 data) Tj
+0 -10 Td
+(    /// points before making a determination.) Tj
+0 -10 Td
+(    func learnUserPattern\(from interactions: [Interaction], preferences: UserPreferences\) {) Tj
+0 -10 Td
+(        guard interactions.count >= 3 else { return }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+ET
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 9 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+9 0 obj
+<< /Length 4203 >>
+stream
+BT
+/F1 8 Tf
+40 792 Td
+(        let morningInteractions = interactions.filter { interaction in) Tj
+0 -10 Td
+(            let hour = Calendar.current.component\(.hour, from: interaction.createdAt\)) Tj
+0 -10 Td
+(            return hour >= 6 && hour < 12) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let eveningInteractions = interactions.filter { interaction in) Tj
+0 -10 Td
+(            let hour = Calendar.current.component\(.hour, from: interaction.createdAt\)) Tj
+0 -10 Td
+(            return hour >= 17 && hour < 22) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        if morningInteractions.count > eveningInteractions.count && morningInteractions.count >= 2 {) Tj
+0 -10 Td
+(            preferences.userEngagementPattern = "morning") Tj
+0 -10 Td
+(            if let firstMorning = morningInteractions.first {) Tj
+0 -10 Td
+(                preferences.typicalInteractionHour = Calendar.current.component\(.hour, from: firstMorning.createdAt\)) Tj
+0 -10 Td
+(                preferences.typicalInteractionMinute = Calendar.current.component\(.minute, from: firstMorning.createdAt\)) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+(        } else if eveningInteractions.count > morningInteractions.count && eveningInteractions.count >= 2 {) Tj
+0 -10 Td
+(            preferences.userEngagementPattern = "evening") Tj
+0 -10 Td
+(            if let firstEvening = eveningInteractions.first {) Tj
+0 -10 Td
+(                preferences.typicalInteractionHour = Calendar.current.component\(.hour, from: firstEvening.createdAt\)) Tj
+0 -10 Td
+(                preferences.typicalInteractionMinute = Calendar.current.component\(.minute, from: firstEvening.createdAt\)) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+(        } else {) Tj
+0 -10 Td
+(            preferences.userEngagementPattern = "flexible") Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // Store recent interaction times \(last 10\) for pattern analysis) Tj
+0 -10 Td
+(        let recentInteractions = interactions.sorted { $0.createdAt > $1.createdAt }.prefix\(10\)) Tj
+0 -10 Td
+(        preferences.interactionTimesAsDates = Array\(recentInteractions.map { $0.createdAt }\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        preferences.updatedAt = Date\(\)) Tj
+0 -10 Td
+(        preferences.version += 1) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Smart Notification Timing) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Determine notification hours based on window, user pattern, and engagement.) Tj
+0 -10 Td
+(    ///) Tj
+0 -10 Td
+(    /// This is the core scheduling algorithm. It cross-references:) Tj
+0 -10 Td
+(    /// 1. Activity type \(which window is appropriate\)) Tj
+0 -10 Td
+(    /// 2. User's learned rhythm \(morning vs evening person\)) Tj
+0 -10 Td
+(    /// 3. Current progress \(no reminders if complete\)) Tj
+0 -10 Td
+(    /// 4. Engagement level \(fewer reminders for active users\)) Tj
+0 -10 Td
+(    func determineNotificationTimes\() Tj
+0 -10 Td
+(        window: NotificationWindow,) Tj
+0 -10 Td
+(        userPattern: String?,) Tj
+0 -10 Td
+(        progress: Int,) Tj
+0 -10 Td
+(        engagementLevel: EngagementLevel,) Tj
+0 -10 Td
+(        activityTitle: String?) Tj
+0 -10 Td
+(    \) -> [Int] { // Returns array of hours \(0-23\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        switch window {) Tj
+0 -10 Td
+(        case .eveningOnly:) Tj
+0 -10 Td
+(            if progress == 0 {) Tj
+0 -10 Td
+(                return [19, 21]) Tj
+0 -10 Td
+(            } else if progress < 100 {) Tj
+0 -10 Td
+(                return [20]) Tj
+0 -10 Td
+(            } else {) Tj
+0 -10 Td
+(                return []) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        case .morningOnly:) Tj
+0 -10 Td
+(            if progress == 0 {) Tj
+0 -10 Td
+(                return [7, 8]) Tj
+0 -10 Td
+(            } else if progress < 100 {) Tj
+0 -10 Td
+(                return [8]) Tj
+0 -10 Td
+(            } else {) Tj
+0 -10 Td
+(                return []) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        case .morningOrEvening:) Tj
+0 -10 Td
+(            // Adapt to learned user pattern) Tj
+0 -10 Td
+(            if let pattern = userPattern {) Tj
+0 -10 Td
+(                if pattern == "morning" {) Tj
+0 -10 Td
+ET
+
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 11 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+11 0 obj
+<< /Length 3743 >>
+stream
+BT
+/F1 8 Tf
+40 792 Td
+(                    return progress == 0 ? [7, 8] : \(progress < 100 ? [8] : []\)) Tj
+0 -10 Td
+(                } else if pattern == "evening" {) Tj
+0 -10 Td
+(                    return progress == 0 ? [19, 20] : \(progress < 100 ? [20] : []\)) Tj
+0 -10 Td
+(                }) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(            // Unknown pattern: try both, modulate by engagement) Tj
+0 -10 Td
+(            if progress == 0 {) Tj
+0 -10 Td
+(                return [8, 20]) Tj
+0 -10 Td
+(            } else if progress < 100 {) Tj
+0 -10 Td
+(                switch engagementLevel {) Tj
+0 -10 Td
+(                case .highlyActive:) Tj
+0 -10 Td
+(                    return []) Tj
+0 -10 Td
+(                case .active, .moderate:) Tj
+0 -10 Td
+(                    return [20]) Tj
+0 -10 Td
+(                case .inactive:) Tj
+0 -10 Td
+(                    return [9, 20]) Tj
+0 -10 Td
+(                }) Tj
+0 -10 Td
+(            } else {) Tj
+0 -10 Td
+(                return []) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        case .throughoutDay:) Tj
+0 -10 Td
+(            switch engagementLevel {) Tj
+0 -10 Td
+(            case .highlyActive:) Tj
+0 -10 Td
+(                return progress == 0 ? [14] : []) Tj
+0 -10 Td
+(            case .active:) Tj
+0 -10 Td
+(                return progress == 0 ? [9, 14] : [14]) Tj
+0 -10 Td
+(            case .moderate:) Tj
+0 -10 Td
+(                return progress == 0 ? [9, 14, 19] : [14, 19]) Tj
+0 -10 Td
+(            case .inactive:) Tj
+0 -10 Td
+(                return progress == 0 ? [9, 12, 15, 19] : [12, 15, 19]) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        case .flexible:) Tj
+0 -10 Td
+(            if let pattern = userPattern {) Tj
+0 -10 Td
+(                if pattern == "morning" {) Tj
+0 -10 Td
+(                    return progress == 0 ? [8, 14] : [14]) Tj
+0 -10 Td
+(                } else if pattern == "evening" {) Tj
+0 -10 Td
+(                    return progress == 0 ? [14, 20] : [20]) Tj
+0 -10 Td
+(                }) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+(            return progress == 0 ? [9, 14, 20] : [14, 20]) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Engagement Level Detection) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    enum EngagementLevel {) Tj
+0 -10 Td
+(        case highlyActive  // Engages daily) Tj
+0 -10 Td
+(        case active        // Most days) Tj
+0 -10 Td
+(        case moderate      // 3-4 days per week) Tj
+0 -10 Td
+(        case inactive      // < 3 days per week or 2+ days absent) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Classify engagement from recent activity.) Tj
+0 -10 Td
+(    ///) Tj
+0 -10 Td
+(    /// Uses two signals: days since last app launch \(recency\) and) Tj
+0 -10 Td
+(    /// count of interactions in the trailing 7-day window \(frequency\).) Tj
+0 -10 Td
+(    func getEngagementLevel\(activity: Activity?, preferences: UserPreferences\) -> EngagementLevel {) Tj
+0 -10 Td
+(        guard activity != nil else { return .moderate }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let daysSinceLaunch = preferences.daysSinceLastLaunch) Tj
+0 -10 Td
+(        if daysSinceLaunch >= 2 {) Tj
+0 -10 Td
+(            return .inactive) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let sevenDaysAgo = Calendar.current.date\(byAdding: .day, value: -7, to: Date\(\)\) ?? Date\(\)) Tj
+0 -10 Td
+(        let recentInteractions = preferences.interactionTimesAsDates.filter { $0 >= sevenDaysAgo }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        if recentInteractions.count >= 6 {) Tj
+0 -10 Td
+(            return .highlyActive) Tj
+0 -10 Td
+(        } else if recentInteractions.count >= 4 {) Tj
+0 -10 Td
+(            return .active) Tj
+0 -10 Td
+ET
+
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 13 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+13 0 obj
+<< /Length 3864 >>
+stream
+BT
+/F1 8 Tf
+40 792 Td
+(        } else if recentInteractions.count >= 2 {) Tj
+0 -10 Td
+(            return .moderate) Tj
+0 -10 Td
+(        } else {) Tj
+0 -10 Td
+(            return .inactive) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Notification Response Learning) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Track that user opened the app within 1 hour of a notification at this time.) Tj
+0 -10 Td
+(    func trackNotificationResponse\(hour: Int, minute: Int, preferences: UserPreferences\) {) Tj
+0 -10 Td
+(        let key = "\\\(hour\)_\\\(minute\)") Tj
+0 -10 Td
+(        let currentCount = preferences.notificationResponseHistory[key] ?? 0) Tj
+0 -10 Td
+(        preferences.notificationResponseHistory[key] = currentCount + 1) Tj
+0 -10 Td
+(        preferences.updatedAt = Date\(\)) Tj
+0 -10 Td
+(        preferences.version += 1) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Return notification times with 3+ tracked responses \(proven effective\).) Tj
+0 -10 Td
+(    func getEffectiveNotificationTimes\(preferences: UserPreferences\) -> [String] {) Tj
+0 -10 Td
+(        return preferences.notificationResponseHistory) Tj
+0 -10 Td
+(            .filter { $0.value >= 3 }) Tj
+0 -10 Td
+(            .map { $0.key }) Tj
+0 -10 Td
+(            .sorted\(\)) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Validation Gate) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Multi-layered validation: checks activity window, quiet hours, recency,) Tj
+0 -10 Td
+(    /// and ignored-time list before allowing a notification to be scheduled.) Tj
+0 -10 Td
+(    func shouldSendNotification\() Tj
+0 -10 Td
+(        activity: Activity?,) Tj
+0 -10 Td
+(        hour: Int,) Tj
+0 -10 Td
+(        preferences: UserPreferences) Tj
+0 -10 Td
+(    \) -> Bool {) Tj
+0 -10 Td
+(        guard preferences.notificationsEnabled else { return false }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // Already complete -- no reminder needed) Tj
+0 -10 Td
+(        if let activity = activity, activity.dailyProgress >= 100 {) Tj
+0 -10 Td
+(            return false) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // Activity-specific time-of-day validation) Tj
+0 -10 Td
+(        if let activity = activity {) Tj
+0 -10 Td
+(            let window = getNotificationWindow\(for: activity.category\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(            switch window {) Tj
+0 -10 Td
+(            case .eveningOnly:) Tj
+0 -10 Td
+(                if hour < 19 || hour > 22 { return false }) Tj
+0 -10 Td
+(            case .morningOrEvening:) Tj
+0 -10 Td
+(                let isMorning = hour >= 6 && hour < 9) Tj
+0 -10 Td
+(                let isEvening = hour >= 18 && hour < 21) Tj
+0 -10 Td
+(                if !isMorning && !isEvening {) Tj
+0 -10 Td
+(                    if let pattern = preferences.userEngagementPattern {) Tj
+0 -10 Td
+(                        if pattern == "morning" && !isMorning { return false }) Tj
+0 -10 Td
+(                        if pattern == "evening" && !isEvening { return false }) Tj
+0 -10 Td
+(                    }) Tj
+0 -10 Td
+(                    if hour >= 12 && hour < 17 { return false }) Tj
+0 -10 Td
+(                }) Tj
+0 -10 Td
+(            default:) Tj
+0 -10 Td
+(                break) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // Don't remind if user engaged within the last hour) Tj
+0 -10 Td
+(        if let activity = activity,) Tj
+0 -10 Td
+(           let lastInteraction = activity.lastInteractionDate,) Tj
+0 -10 Td
+(           Date\(\).timeIntervalSince\(lastInteraction\) < 3600 {) Tj
+0 -10 Td
+(            return false) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // Quiet hours) Tj
+0 -10 Td
+(        if preferences.quietHoursEnabled {) Tj
+0 -10 Td
+(            if hour >= preferences.quietHoursStart || hour < preferences.quietHoursEnd {) Tj
+0 -10 Td
+ET
+
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 15 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+15 0 obj
+<< /Length 3793 >>
+stream
+BT
+/F1 8 Tf
+40 792 Td
+(                return false) Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // Ignored times \(user consistently doesn't respond\)) Tj
+0 -10 Td
+(        if preferences.ignoredNotificationTimes.contains\("\\\(hour\)_0"\) {) Tj
+0 -10 Td
+(            return false) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // General bounds: 6 AM - 10 PM) Tj
+0 -10 Td
+(        if hour < 6 || hour > 22 { return false }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        return true) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Smart Scheduling \(Orchestrator\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Top-level entry point: computes window, pattern, engagement, timing,) Tj
+0 -10 Td
+(    /// validates each hour, then schedules the surviving set.) Tj
+0 -10 Td
+(    func scheduleSmartNotifications\() Tj
+0 -10 Td
+(        activity: Activity?,) Tj
+0 -10 Td
+(        preferences: UserPreferences,) Tj
+0 -10 Td
+(        context: ModelContext) Tj
+0 -10 Td
+(    \) async {) Tj
+0 -10 Td
+(        guard preferences.notificationsEnabled else {) Tj
+0 -10 Td
+(            cancelAllNotifications\(\)) Tj
+0 -10 Td
+(            return) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        guard let activity = activity else {) Tj
+0 -10 Td
+(            await scheduleReEngagementNotifications\(preferences: preferences\)) Tj
+0 -10 Td
+(            return) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let window = getNotificationWindow\(for: activity.category\)) Tj
+0 -10 Td
+(        let userPattern = preferences.userEngagementPattern) Tj
+0 -10 Td
+(        let progress = activity.dailyProgress) Tj
+0 -10 Td
+(        let engagementLevel = getEngagementLevel\(activity: activity, preferences: preferences\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let candidateHours = determineNotificationTimes\() Tj
+0 -10 Td
+(            window: window,) Tj
+0 -10 Td
+(            userPattern: userPattern,) Tj
+0 -10 Td
+(            progress: progress,) Tj
+0 -10 Td
+(            engagementLevel: engagementLevel,) Tj
+0 -10 Td
+(            activityTitle: activity.title) Tj
+0 -10 Td
+(        \)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let validHours = candidateHours.filter { hour in) Tj
+0 -10 Td
+(            shouldSendNotification\(activity: activity, hour: hour, preferences: preferences\)) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        await scheduleNotifications\(hours: validHours, activity: activity, preferences: preferences\)) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Re-Engagement Notifications) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    /// Schedule gentle re-engagement notifications when user has no active activity.) Tj
+0 -10 Td
+(    private func scheduleReEngagementNotifications\(preferences: UserPreferences\) async {) Tj
+0 -10 Td
+(        let center = UNUserNotificationCenter.current\(\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // Clear existing re-engagement notifications) Tj
+0 -10 Td
+(        let requests = await center.pendingNotificationRequests\(\)) Tj
+0 -10 Td
+(        let ids = requests) Tj
+0 -10 Td
+(            .filter { $0.identifier.hasPrefix\("smartInteraction"\) || $0.identifier.hasPrefix\("reEngage"\) }) Tj
+0 -10 Td
+(            .map { $0.identifier }) Tj
+0 -10 Td
+(        if !ids.isEmpty {) Tj
+0 -10 Td
+(            center.removePendingNotificationRequests\(withIdentifiers: ids\)) Tj
+0 -10 Td
+(            try? await Task.sleep\(for: .milliseconds\(100\)\)) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // Determine best hour based on learned pattern; default to evening) Tj
+0 -10 Td
+(        let hour: Int) Tj
+0 -10 Td
+(        if let pattern = preferences.userEngagementPattern {) Tj
+0 -10 Td
+(            hour = \(pattern == "morning"\) ? 8 : 20) Tj
+0 -10 Td
+ET
+
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 17 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+17 0 obj
+<< /Length 4000 >>
+stream
+BT
+/F1 8 Tf
+40 792 Td
+(        } else {) Tj
+0 -10 Td
+(            hour = 20) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        var dateComponents = DateComponents\(\)) Tj
+0 -10 Td
+(        dateComponents.hour = hour) Tj
+0 -10 Td
+(        dateComponents.minute = 0) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let content = UNMutableNotificationContent\(\)) Tj
+0 -10 Td
+(        content.title = "Ready to start?") Tj
+0 -10 Td
+(        content.body = Self.timeGreeting\(hour: hour\) + "! Your next activity is waiting.") Tj
+0 -10 Td
+(        content.sound = .default) Tj
+0 -10 Td
+(        content.categoryIdentifier = "ENGAGE") Tj
+0 -10 Td
+(        content.userInfo = ["notificationType": "reEngage", "hour": hour]) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let trigger = UNCalendarNotificationTrigger\(dateMatching: dateComponents, repeats: true\)) Tj
+0 -10 Td
+(        let request = UNNotificationRequest\(identifier: "reEngage_\\\(hour\)", content: content, trigger: trigger\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        do {) Tj
+0 -10 Td
+(            try await center.add\(request\)) Tj
+0 -10 Td
+(        } catch {) Tj
+0 -10 Td
+(            print\("Failed to schedule re-engagement notification: \\\(error\)"\)) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Schedule Concrete Notifications) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    private func scheduleNotifications\() Tj
+0 -10 Td
+(        hours: [Int],) Tj
+0 -10 Td
+(        activity: Activity?,) Tj
+0 -10 Td
+(        preferences: UserPreferences) Tj
+0 -10 Td
+(    \) async {) Tj
+0 -10 Td
+(        let center = UNUserNotificationCenter.current\(\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        // Remove previously-scheduled smart notifications) Tj
+0 -10 Td
+(        let existing = await center.pendingNotificationRequests\(\)) Tj
+0 -10 Td
+(        let ids = existing.filter { $0.identifier.hasPrefix\("smartInteraction"\) }.map { $0.identifier }) Tj
+0 -10 Td
+(        if !ids.isEmpty {) Tj
+0 -10 Td
+(            center.removePendingNotificationRequests\(withIdentifiers: ids\)) Tj
+0 -10 Td
+(            try? await Task.sleep\(for: .milliseconds\(100\)\)) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        let activityTitle = activity?.title ?? "Your Activity") Tj
+0 -10 Td
+(        let progress = activity?.dailyProgress ?? 0) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(        for \(index, hour\) in hours.enumerated\(\) {) Tj
+0 -10 Td
+(            var dateComponents = DateComponents\(\)) Tj
+0 -10 Td
+(            dateComponents.hour = hour) Tj
+0 -10 Td
+(            dateComponents.minute = 0) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(            let content = UNMutableNotificationContent\(\)) Tj
+0 -10 Td
+(            content.title = activityTitle) Tj
+0 -10 Td
+(            content.body = Self.progressMessage\(progress: progress, hour: hour\)) Tj
+0 -10 Td
+(            content.sound = .default) Tj
+0 -10 Td
+(            content.categoryIdentifier = "ENGAGE") Tj
+0 -10 Td
+(            content.userInfo = [) Tj
+0 -10 Td
+(                "activityTitle": activityTitle,) Tj
+0 -10 Td
+(                "dailyProgress": progress,) Tj
+0 -10 Td
+(                "notificationType": "smartInteraction",) Tj
+0 -10 Td
+(                "hour": hour) Tj
+0 -10 Td
+(            ]) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(            if #available\(iOS 15.0, *\) {) Tj
+0 -10 Td
+(                content.threadIdentifier = "activity-reminder") Tj
+0 -10 Td
+(            }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(            let trigger = UNCalendarNotificationTrigger\(dateMatching: dateComponents, repeats: true\)) Tj
+0 -10 Td
+(            let identifier = "smartInteraction_\\\(hour\)_\\\(index\)") Tj
+0 -10 Td
+(            let request = UNNotificationRequest\(identifier: identifier, content: content, trigger: trigger\)) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(            do {) Tj
+0 -10 Td
+(                try await center.add\(request\)) Tj
+0 -10 Td
+(            } catch {) Tj
+0 -10 Td
+(                print\("Failed to schedule notification \\\(identifier\): \\\(error\)"\)) Tj
+0 -10 Td
+ET
+
+endstream
+endobj
+18 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 19 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+19 0 obj
+<< /Length 1266 >>
+stream
+BT
+/F1 8 Tf
+40 792 Td
+(            }) Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    // MARK: - Helpers) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    private static func timeGreeting\(hour: Int\) -> String {) Tj
+0 -10 Td
+(        if hour >= 6 && hour < 12 { return "Good morning" }) Tj
+0 -10 Td
+(        if hour >= 12 && hour < 17 { return "Good afternoon" }) Tj
+0 -10 Td
+(        return "Good evening") Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+(    private static func progressMessage\(progress: Int, hour: Int\) -> String {) Tj
+0 -10 Td
+(        let greeting = timeGreeting\(hour: hour\)) Tj
+0 -10 Td
+(        switch progress {) Tj
+0 -10 Td
+(        case 0:       return "\\\(greeting\)! Ready to get started today?") Tj
+0 -10 Td
+(        case 1..<25:  return "You're at \\\(progress\)%. Keep the momentum going!") Tj
+0 -10 Td
+(        case 25..<50: return "Nice progress at \\\(progress\)%! Ready to continue?") Tj
+0 -10 Td
+(        case 50..<75: return "You're at \\\(progress\)%! Almost there.") Tj
+0 -10 Td
+(        case 75..<100: return "So close at \\\(progress\)%! Finish strong.") Tj
+0 -10 Td
+(        default:      return "Great work today!") Tj
+0 -10 Td
+(        }) Tj
+0 -10 Td
+(    }) Tj
+0 -10 Td
+(}) Tj
+0 -10 Td
+() Tj
+0 -10 Td
+ET
+
+endstream
+endobj
+xref
+0 20
+0000000000 65535 f 
+0000000009 00000 g 
+0000000058 00000 g 
+0000000162 00000 g 
+0000000230 00000 g 
+0000000356 00000 g 
+0000004078 00000 g 
+0000004204 00000 g 
+0000008425 00000 g 
+0000008551 00000 g 
+0000012806 00000 g 
+0000012934 00000 g 
+0000016730 00000 g 
+0000016858 00000 g 
+0000020775 00000 g 
+0000020903 00000 g 
+0000024749 00000 g 
+0000024877 00000 g 
+0000028930 00000 g 
+0000029058 00000 g 
+trailer
+<< /Size 20 /Root 1 0 R >>
+startxref
+30377
+%%EOF
