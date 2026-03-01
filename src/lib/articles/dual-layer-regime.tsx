@@ -8,15 +8,16 @@ export function DualLayerRegimeContent() {
         another</strong>.
       </p>
       <p>
-        In trading, a trend-following strategy makes money when markets trend
-        and loses when they chop sideways. In infrastructure, an autoscaler
-        tuned for steady growth overshoots during spike traffic. In ML, a model
-        trained on one data distribution degrades when the distribution shifts.
+        A recommendation engine tuned for normal browsing patterns fails during
+        viral events. An autoscaler calibrated for steady growth overshoots during
+        spike traffic. An ML model trained on one data distribution degrades when
+        the distribution shifts. A content moderation pipeline tuned for English
+        text misclassifies when multilingual content surges.
       </p>
       <p>
-        The standard solution is a regime detector — a classifier that tells
+        The standard solution is a regime detector &mdash; a classifier that tells
         you which condition you&rsquo;re currently in, so you can switch strategies.
-        Hidden Markov Models, rolling volatility, clustering — all of them
+        Hidden Markov Models, rolling statistics, clustering &mdash; all of them
         answer the question: <em>&ldquo;What mode are we in right now?&rdquo;</em>
       </p>
       <p>
@@ -26,9 +27,9 @@ export function DualLayerRegimeContent() {
       </p>
       <p>
         Transitions are where the damage happens. Your classifier says
-        &ldquo;TREND&rdquo; because it hasn&rsquo;t seen enough data to
-        reclassify, but the trend ended 3 data points ago. You&rsquo;re making
-        trend decisions in a market that&rsquo;s already choppy.
+        &ldquo;NORMAL&rdquo; because it hasn&rsquo;t seen enough data to
+        reclassify, but the regime ended 3 data points ago. You&rsquo;re making
+        normal-mode decisions in a system that&rsquo;s already in crisis.
       </p>
       <blockquote>
         <p>
@@ -39,27 +40,30 @@ export function DualLayerRegimeContent() {
 
       <h2>Where This Applies</h2>
       <p>
-        The two-layer pattern — <strong>structural classification + transition
-        detection</strong> — generalizes far beyond finance:
+        The two-layer pattern &mdash; <strong>structural classification + transition
+        detection</strong> &mdash; generalizes across any domain with changing
+        operating conditions:
       </p>
       <ul>
         <li>
-          <strong>ML model monitoring</strong> — Layer 1: what distribution is
+          <strong>ML model monitoring</strong> &mdash; Layer 1: what distribution is
           the data in? Layer 2: is the distribution shifting right now? Catch
           model drift 1-3 batches before accuracy drops.
         </li>
         <li>
-          <strong>Infrastructure scaling</strong> — Layer 1: what traffic
+          <strong>Infrastructure scaling</strong> &mdash; Layer 1: what traffic
           pattern are we in (steady, ramp, spike)? Layer 2: are we transitioning?
           Scale conservatively during transitions instead of overcommitting.
         </li>
         <li>
-          <strong>Feature flags / A/B tests</strong> — Layer 1: what user
+          <strong>Feature flags / A/B tests</strong> &mdash; Layer 1: what user
           behavior mode are we in? Layer 2: did a regime change just invalidate
           our test? Pause the test during transitions.
         </li>
         <li>
-          <strong>Trading</strong> — our production use case, detailed below.
+          <strong>Autonomous agents</strong> &mdash; Layer 1: what task complexity
+          regime is the agent in? Layer 2: did the problem difficulty just shift?
+          Adjust confidence thresholds before the agent overcommits.
         </li>
       </ul>
 
@@ -72,25 +76,25 @@ export function DualLayerRegimeContent() {
         The Kaufman Efficiency Ratio is embarrassingly simple: <strong>how much
         of the total movement was productive?</strong> Divide net displacement
         by total path length. A value of 1.0 means every step moved in the
-        same direction (pure trend). A value near 0 means the system went
-        nowhere despite lots of movement (noise/chop).
+        same direction (pure signal). A value near 0 means the system went
+        nowhere despite lots of movement (noise).
       </p>
       <pre><code>{`# The formula
 ER = |end_position - start_position| / sum_of_all_step_sizes
 
-# Concrete example: price over 20 periods
-# Straight line up $10:  ER = 10/10 = 1.0   → TREND
-# Up $5, down $5:        ER = 0/10 = 0.0    → DEEP_CHOP
-# Drift up $3 total:     ER = 3/12 = 0.25   → NORMAL`}</code></pre>
+# Concrete example: metric over 20 periods
+# Steady increase of 10 units:  ER = 10/10 = 1.0   → TREND (strong signal)
+# Up 5, down 5:                 ER = 0/10 = 0.0    → DEEP_CHOP (pure noise)
+# Slow drift up 3 total:        ER = 3/12 = 0.25   → NORMAL`}</code></pre>
       <p>
-        This works for any time series — not just prices. Server response
-        times, user engagement metrics, error rates. If you can plot it on a
-        line chart, you can compute ER.
+        This works for any time series &mdash; server response times, user
+        engagement metrics, error rates, model accuracy over time. If you can
+        plot it on a line chart, you can compute ER.
       </p>
 
       <h3>Graduated Classification</h3>
       <p>
-        The key insight: <strong>binary classification (trend vs chop) throws
+        The key insight: <strong>binary classification (signal vs noise) throws
         away information</strong>. There are meaningfully different behaviors
         at different ER levels. We use five tiers:
       </p>
@@ -99,7 +103,7 @@ ER = |end_position - start_position| / sum_of_all_step_sizes
           <tr>
             <th>Regime</th>
             <th>ER Range</th>
-            <th>Sizing</th>
+            <th>Confidence</th>
             <th>What It Means</th>
           </tr>
         </thead>
@@ -108,7 +112,7 @@ ER = |end_position - start_position| / sum_of_all_step_sizes
             <td><code>TREND</code></td>
             <td>&ge; 0.35</td>
             <td>100%</td>
-            <td>Strong directional movement. Full confidence.</td>
+            <td>Strong directional signal. Full confidence in decisions.</td>
           </tr>
           <tr>
             <td><code>NORMAL</code></td>
@@ -120,7 +124,7 @@ ER = |end_position - start_position| / sum_of_all_step_sizes
             <td><code>VOLATILE</code></td>
             <td>&lt; 0.20, high variance</td>
             <td>70%</td>
-            <td>Big moves, no direction. Widen safety margins.</td>
+            <td>Big movements, no direction. Widen safety margins.</td>
           </tr>
           <tr>
             <td><code>LIGHT_CHOP</code></td>
@@ -139,23 +143,24 @@ ER = |end_position - start_position| / sum_of_all_step_sizes
 
       <h3>The Asymmetry Discovery</h3>
       <p>
-        An interesting finding from production data: <strong>pessimistic
-        signals work in chop, optimistic ones don&rsquo;t</strong>. In
-        our trading system, short signals during LIGHT_CHOP had a 66.7% win
-        rate (profit factor 2.02). Long signals had 52% — barely random.
+        An interesting finding from production data: <strong>negative signals
+        work in noisy regimes, positive ones don&rsquo;t</strong>. Pessimistic
+        indicators during LIGHT_CHOP had significantly higher accuracy than
+        optimistic ones &mdash; which were barely better than random.
       </p>
       <p>
-        This makes intuitive sense: downward momentum is driven by fear, which
-        is more directional than the hope that drives upward moves. In chop,
-        fear-driven selloffs still follow through. Hope-driven rallies don&rsquo;t.
+        This makes intuitive sense: negative signals are driven by urgency,
+        which is more directional than the hope that drives positive signals.
+        In noise, urgency-driven actions still follow through. Hope-driven
+        actions don&rsquo;t.
       </p>
       <pre><code>{`REGIME_CONFIG = {
-    "TREND":      {"size_mult": 1.0,  "confirms": 1},
-    "NORMAL":     {"size_mult": 0.85, "confirms": 1},
-    "VOLATILE":   {"size_mult": 0.70, "confirms": 2},
-    "LIGHT_CHOP": {"size_mult": 0.60, "confirms": 1,
+    "TREND":      {"confidence": 1.0,  "confirms": 1},
+    "NORMAL":     {"confidence": 0.85, "confirms": 1},
+    "VOLATILE":   {"confidence": 0.70, "confirms": 2},
+    "LIGHT_CHOP": {"confidence": 0.60, "confirms": 1,
                    "optimistic_confirms": 99},  # blocks optimistic actions
-    "DEEP_CHOP":  {"size_mult": 0.50, "confirms": 3},
+    "DEEP_CHOP":  {"confidence": 0.50, "confirms": 3},
 }`}</code></pre>
 
       <hr />
@@ -165,7 +170,7 @@ ER = |end_position - start_position| / sum_of_all_step_sizes
       <h3>What It Is</h3>
       <p>
         ADWIN (Adaptive Windowing) comes from the streaming machine learning
-        library <code>river</code>. It was designed to detect concept drift —
+        library <code>river</code>. It was designed to detect concept drift &mdash;
         when the statistical distribution of a data stream changes. It
         continuously monitors a stream and fires when it detects that the
         recent data comes from a different distribution than the older data.
@@ -185,12 +190,12 @@ ER = |end_position - start_position| / sum_of_all_step_sizes
       <ul>
         <li>
           <strong>Level detector</strong> (<code>delta=0.002</code>, more
-          sensitive) — catches shifts in the <em>mean</em>. Detects when
+          sensitive) &mdash; catches shifts in the <em>mean</em>. Detects when
           the center of the distribution moves.
         </li>
         <li>
-          <strong>Volatility detector</strong> (<code>delta=0.02</code>, less
-          sensitive) — catches shifts in the <em>variance</em>. Detects when
+          <strong>Variance detector</strong> (<code>delta=0.02</code>, less
+          sensitive) &mdash; catches shifts in the <em>variance</em>. Detects when
           the spread of the distribution changes.
         </li>
       </ul>
@@ -207,18 +212,18 @@ ER = |end_position - start_position| / sum_of_all_step_sizes
         from 60% back to 100% over 3 data points:
       </p>
       <pre><code>{`class ADWINDriftDetector:
-    def size_modifier(self) -> float:
+    def confidence_modifier(self) -> float:
         """How much to trust our current strategy.
         Returns 1.0 when stable, less during transitions."""
-        if self.bars_since_drift == 0:  return 0.60  # just detected shift
-        elif self.bars_since_drift == 1: return 0.75  # still uncertain
-        elif self.bars_since_drift <= 3: return 0.90  # settling down
-        return 1.0                                     # stable again`}</code></pre>
+        if self.steps_since_drift == 0:  return 0.60  # just detected shift
+        elif self.steps_since_drift == 1: return 0.75  # still uncertain
+        elif self.steps_since_drift <= 3: return 0.90  # settling down
+        return 1.0                                      # stable again`}</code></pre>
       <p>
         This is critical: <strong>the transition period is the most dangerous
         time</strong>. The old regime assumptions are stale but the new regime
-        hasn&rsquo;t been confirmed yet. Reducing exposure during this window
-        prevents the biggest losses.
+        hasn&rsquo;t been confirmed yet. Reducing confidence during this window
+        prevents the biggest mistakes.
       </p>
 
       <hr />
@@ -226,20 +231,20 @@ ER = |end_position - start_position| / sum_of_all_step_sizes
       <h2>Composition: Multiplying the Layers</h2>
       <p>
         The two layers compose multiplicatively. This means they&rsquo;re
-        independent — neither needs to know about the other:
+        independent &mdash; neither needs to know about the other:
       </p>
       <pre><code>{`# Layer 1: what regime are we in? → base confidence
 regime = classify_regime(er_value, variance_percentile)
-base_confidence = REGIME_CONFIG[regime]["size_mult"]
+base_confidence = REGIME_CONFIG[regime]["confidence"]
 
 # Layer 2: are we transitioning? → uncertainty modifier
-transition_mod = adwin_detector.size_modifier()
+transition_mod = adwin_detector.confidence_modifier()
 
 # Composite confidence
 effective_confidence = base_confidence * transition_mod`}</code></pre>
 
       <h3>Worked Example</h3>
-      <pre><code>{`# Scenario: market is transitioning from NORMAL to TREND
+      <pre><code>{`# Scenario: system is transitioning from NORMAL to TREND
 
 # Time T (ADWIN just fired):
 #   ER still says NORMAL       → base = 0.85
@@ -263,7 +268,7 @@ effective_confidence = base_confidence * transition_mod`}</code></pre>
       <p>
         The system is naturally most conservative when it matters most:
         during regime transitions in noisy conditions. And most confident
-        when conditions are stable and trending. No manual rules needed —
+        when conditions are stable and trending. No manual rules needed &mdash;
         this falls out of the multiplication.
       </p>
 
@@ -271,7 +276,7 @@ effective_confidence = base_confidence * transition_mod`}</code></pre>
 
       <h2>Results</h2>
       <p>
-        Backtested across 5 walk-forward passes (no lookahead bias):
+        Validated across 5 walk-forward evaluation passes (no lookahead bias):
       </p>
       <table>
         <thead>
@@ -285,10 +290,10 @@ effective_confidence = base_confidence * transition_mod`}</code></pre>
           <tr>
             <td>Monte Carlo confidence</td>
             <td>98.3%</td>
-            <td>Probability the strategy is profitable, not lucky</td>
+            <td>Probability the system is effective, not lucky</td>
           </tr>
           <tr>
-            <td>Avg return per pass</td>
+            <td>Avg improvement per pass</td>
             <td>+25.0%</td>
             <td>Consistent across different time windows</td>
           </tr>
@@ -298,28 +303,27 @@ effective_confidence = base_confidence * transition_mod`}</code></pre>
             <td>Survived every regime transition</td>
           </tr>
           <tr>
-            <td>CHOP profit factor</td>
-            <td>1.84</td>
-            <td>Profitable in the regime most systems lose money</td>
+            <td>CHOP regime accuracy</td>
+            <td>1.84x baseline</td>
+            <td>Effective in the regime most systems fail</td>
           </tr>
           <tr>
-            <td>TREND profit factor</td>
-            <td>1.98</td>
+            <td>TREND regime accuracy</td>
+            <td>1.98x baseline</td>
             <td>Captures trends when confirmed</td>
           </tr>
         </tbody>
       </table>
       <p>
-        The CHOP profit factor of 1.84 is the headline number. Traditional
-        systems either lose money in chop or avoid it entirely. The graduated
-        classification (blocking optimistic actions, requiring more confirmation)
-        turns a losing regime into a cautiously profitable one.
+        The CHOP accuracy of 1.84x baseline is the headline number. Traditional
+        systems either perform poorly in noisy regimes or avoid them entirely.
+        The graduated classification (blocking optimistic actions, requiring more
+        confirmation) turns a losing regime into a cautiously effective one.
       </p>
       <p>
-        The system runs live, managing all risk internally. The dual-layer
-        detector is the foundation that every other decision builds on — signal
-        selection, position sizing, stop placement, and exit rules all
-        adapt based on the composite regime confidence.
+        The dual-layer detector is the foundation that every other decision
+        builds on &mdash; action selection, resource allocation, safety margins,
+        and exit rules all adapt based on the composite regime confidence.
       </p>
     </>
   );

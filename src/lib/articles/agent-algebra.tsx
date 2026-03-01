@@ -34,8 +34,8 @@ export function AgentAlgebraContent() {
 
       <h2>Where This Applies</h2>
       <p>
-        This is not just for trading. The six primitives apply anywhere you
-        compose multiple AI agents or decision-making components:
+        The six primitives apply anywhere you compose multiple AI agents or
+        decision-making components:
       </p>
       <ul>
         <li>
@@ -59,8 +59,8 @@ export function AgentAlgebraContent() {
           proper scoring rules, filtering noise from signal
         </li>
         <li>
-          <strong>Trading systems</strong> — signal fusion, position sizing,
-          ensemble voting (our production use case)
+          <strong>Resource allocation</strong> — budget sizing, capacity
+          planning, and risk-aware distribution across competing priorities
         </li>
       </ul>
 
@@ -182,9 +182,9 @@ result = contraction_loop(
           ratios rather than grid-searching.
         </li>
         <li>
-          <strong>Our use case</strong> — calibrating Bayesian win-rate priors for
-          a live trading system. Start with guesses, backtest, update, converge
-          to true win rates in 4 iterations.
+          <strong>Agent self-calibration</strong> — an ensemble system starts
+          with estimated accuracy priors, runs evaluation rounds, and converges
+          to true accuracy in 4 iterations.
         </li>
       </ul>
 
@@ -250,9 +250,9 @@ prediction = ensemble.predict(new_input)
           checker catches patterns, security scanner catches what both missed.
         </li>
         <li>
-          <strong>Our use case</strong> — prediction market signals where
-          individual feeds (Elo model, order book analysis, news sentiment) are
-          mediocre alone but strong together when boosted.
+          <strong>Anomaly detection</strong> — individual detectors (statistical,
+          rule-based, ML-based) are mediocre alone but strong together when
+          each specializes in what the others miss.
         </li>
       </ul>
 
@@ -321,10 +321,9 @@ combined = tracker.aggregate({"gpt4": 0.75, "claude": 0.60})
           strategies are well-calibrated and weight accordingly.
         </li>
         <li>
-          <strong>Our use case</strong> — a trading system where 4 signal
-          sources are automatically weighted by Brier score. A poorly
-          calibrated sentiment signal gets downweighted without manual
-          intervention.
+          <strong>Multi-agent orchestration</strong> — 4 specialized agents
+          are automatically weighted by Brier score. A poorly calibrated
+          agent gets downweighted without manual intervention.
         </li>
       </ul>
 
@@ -388,9 +387,9 @@ result = ergodic_kelly(
           keep, accounting for correlated demand spikes.
         </li>
         <li>
-          <strong>Our use case</strong> — position sizing in a live trading
-          system. Standard Kelly says 26.7%, but the ergodic correction says
-          19.2% is the actual safe bet given real-world drawdown clustering.
+          <strong>Compute budget allocation</strong> — distributing GPU time
+          across concurrent workloads. Standard Kelly says 26.7%, but the
+          ergodic correction says 19.2% given real-world failure clustering.
         </li>
       </ul>
 
@@ -465,10 +464,10 @@ result = propagate(graph, damping=0.3)
           neighbors.
         </li>
         <li>
-          <strong>Our use case</strong> — four signal sources (regime detector,
-          microstructure, sentiment, macro) as a belief graph. Regime influences
-          microstructure and sentiment, creating information flow that averaging
-          would miss.
+          <strong>Pipeline quality assessment</strong> — four quality signals
+          (input validation, processing confidence, output coherence, factual
+          grounding) as a belief graph. Input quality influences processing
+          confidence, creating information flow that averaging would miss.
         </li>
       </ul>
 
@@ -530,9 +529,9 @@ signals = mdl_filter(
           compress well relative to the target contain signal.
         </li>
         <li>
-          <strong>Our use case</strong> — an AI-curated news digest processes
-          hundreds of articles daily. MDL filter drops noise before LLM scoring,
-          saving 40% of API costs.
+          <strong>Data ingestion pipelines</strong> — processing hundreds of
+          documents daily. MDL filter drops noise before LLM scoring, saving
+          40% of API costs.
         </li>
       </ul>
 

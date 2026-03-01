@@ -163,6 +163,7 @@ export const ARTICLES: readonly Article[] = [
     accent: "toxic",
     readTime: "10 min",
     topicCount: 4,
+    repoUrl: "https://github.com/kris-welc/agent-algebra",
     topics: [
       {
         title: "Kaufman Efficiency Ratio",
@@ -192,6 +193,7 @@ export const ARTICLES: readonly Article[] = [
     accent: "rust",
     readTime: "8 min",
     topicCount: 3,
+    repoUrl: "https://github.com/kris-welc/agent-algebra",
     topics: [
       {
         title: "WebSocket Daemon Architecture",

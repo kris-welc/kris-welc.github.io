@@ -7,6 +7,26 @@ interface ArticleLayoutProps {
   readonly children: React.ReactNode;
 }
 
+function StarButton({ repoUrl }: { readonly repoUrl: string }) {
+  return (
+    <a
+      href={repoUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-md border border-waste-amber/40 bg-waste-amber/10 px-4 py-2 font-mono text-xs tracking-wider text-waste-amber transition-all hover:border-waste-amber hover:bg-waste-amber/20 hover:text-waste-amber-light"
+    >
+      <svg
+        className="h-4 w-4"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 19.771l-7.416 3.642 1.48-8.279L0 9.306l8.332-1.151z" />
+      </svg>
+      STAR ON GITHUB
+    </a>
+  );
+}
+
 export function ArticleLayout({ article, children }: ArticleLayoutProps) {
   const formattedDate = article.date
     ? new Date(article.date).toLocaleDateString("en-US", {
@@ -26,25 +46,28 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
           >
             KW://
           </Link>
-          <Link
-            href="/#articles"
-            className="link-underline flex items-center gap-2 text-xs tracking-wide text-waste-dim transition-colors hover:text-waste-bone md:text-sm"
-          >
-            <svg
-              className="h-3 w-3"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div className="flex items-center gap-4">
+            {article.repoUrl && <StarButton repoUrl={article.repoUrl} />}
+            <Link
+              href="/#articles"
+              className="link-underline flex items-center gap-2 text-xs tracking-wide text-waste-dim transition-colors hover:text-waste-bone md:text-sm"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            BACK
-          </Link>
+              <svg
+                className="h-3 w-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              BACK
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -72,19 +95,6 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
               {formattedDate && <time dateTime={article.date}>{formattedDate}</time>}
               <span className="text-waste-border">|</span>
               <span>{article.readTime} read</span>
-              {article.repoUrl && (
-                <>
-                  <span className="text-waste-border">|</span>
-                  <a
-                    href={article.repoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-waste-amber transition-colors hover:text-waste-amber-light"
-                  >
-                    VIEW REPO
-                  </a>
-                </>
-              )}
             </div>
 
             <p className="mt-6 text-lg leading-relaxed text-waste-sand">
@@ -97,7 +107,15 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
 
           {/* Footer */}
           <footer className="mt-16 border-t border-waste-border pt-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col items-center gap-6">
+              {article.repoUrl && (
+                <div className="flex flex-col items-center gap-3">
+                  <p className="font-mono text-xs tracking-wider text-waste-dim">
+                    FOUND THIS USEFUL?
+                  </p>
+                  <StarButton repoUrl={article.repoUrl} />
+                </div>
+              )}
               <Link
                 href="/#articles"
                 className="flex items-center gap-2 font-mono text-xs tracking-wider text-waste-dim transition-colors hover:text-waste-amber"
@@ -117,29 +135,6 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
                 </svg>
                 ALL DISPATCHES
               </Link>
-              {article.repoUrl && (
-                <a
-                  href={article.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 font-mono text-xs tracking-wider text-waste-dim transition-colors hover:text-waste-amber"
-                >
-                  SOURCE CODE
-                  <svg
-                    className="h-3 w-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </a>
-              )}
             </div>
           </footer>
         </article>

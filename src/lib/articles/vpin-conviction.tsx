@@ -5,8 +5,8 @@ export function VpinConvictionContent() {
       <p>
         Imagine you&rsquo;re about to make an important decision. You have your
         own analysis and you&rsquo;re 70% confident. Then you learn that the
-        people with the <em>best</em> information — insiders, domain experts,
-        the ones who consistently know first — are acting in the{" "}
+        people with the <em>best</em> information &mdash; insiders, domain experts,
+        the ones who consistently know first &mdash; are acting in the{" "}
         <strong>opposite direction</strong>.
       </p>
       <p>
@@ -21,28 +21,34 @@ export function VpinConvictionContent() {
         behavior.
       </p>
       <p>
-        In financial markets, this concept has a name: VPIN (Volume-synchronized
-        Probability of Informed Trading). It measures how much of the trading
-        activity comes from people who likely have better information. But the
-        concept generalizes:
+        VPIN (Volume-synchronized Probability of Informed Trading) measures how
+        much of the activity in a system comes from participants who likely have
+        better information. Originally developed for financial microstructure,
+        the concept generalizes to any domain where some actors are better
+        informed than others:
       </p>
       <ul>
         <li>
-          In <strong>content recommendations</strong> — expert users who
+          In <strong>content recommendations</strong> &mdash; expert users who
           consistently find quality content early are &ldquo;informed
-          traders.&rdquo; If they&rsquo;re engaging with content, it&rsquo;s
+          participants.&rdquo; If they&rsquo;re engaging with content, it&rsquo;s
           probably good.
         </li>
         <li>
-          In <strong>fraud detection</strong> — sophisticated actors who
+          In <strong>fraud detection</strong> &mdash; sophisticated actors who
           consistently exploit systems reveal their knowledge through behavior
           patterns.
         </li>
         <li>
-          In <strong>hiring</strong> — when multiple experienced interviewers
+          In <strong>hiring</strong> &mdash; when multiple experienced interviewers
           independently reach the same conclusion, that&rsquo;s high
           &ldquo;informed flow&rdquo; and your confidence in the signal should
           increase.
+        </li>
+        <li>
+          In <strong>open source ecosystems</strong> &mdash; when respected
+          maintainers start adopting a library, that&rsquo;s informed action.
+          When they abandon one, that&rsquo;s an informed exit signal.
         </li>
       </ul>
       <blockquote>
@@ -58,29 +64,28 @@ export function VpinConvictionContent() {
       <h2>The Academic Origin</h2>
       <p>
         VPIN was introduced by Easley, L&oacute;pez de Prado, and O&rsquo;Hara
-        in 2012. They showed you could estimate the probability that a trade
-        was driven by informed actors just from public trade data — by
-        looking at the <strong>imbalance between buyer-initiated and
-        seller-initiated orders</strong>.
+        in 2012. They showed you could estimate the probability that an action
+        was driven by informed actors just from publicly observable data &mdash;
+        by looking at the <strong>imbalance between opposing flows</strong>.
       </p>
       <p>
-        If buying and selling are roughly balanced, both sides have similar
+        If both sides are roughly balanced, all participants have similar
         information (low VPIN). If one side dominates, someone knows something
         (high VPIN). The direction of the imbalance tells you which side the
         informed actors are on.
       </p>
       <pre><code>{`# The formula is simple:
-vpin = abs(buy_volume - sell_volume) / total_volume
+vpin = abs(positive_flow - negative_flow) / total_flow
 
 # VPIN = 0.0  → perfectly balanced, no informed activity
-# VPIN = 0.05 → normal market noise
+# VPIN = 0.05 → normal noise
 # VPIN = 0.20 → significant imbalance, informed actors present
 # VPIN = 0.50 → extreme, one side completely dominates`}</code></pre>
       <p>
         The limitation of the original research: <strong>it was
-        retrospective</strong>. Studies computed VPIN over daily volume
-        buckets and analyzed it after the fact. Useful for academic
-        understanding, not for real-time decisions.
+        retrospective</strong>. Studies computed VPIN over daily buckets and
+        analyzed it after the fact. Useful for academic understanding, not for
+        real-time decisions.
       </p>
 
       <hr />
@@ -89,26 +94,26 @@ vpin = abs(buy_volume - sell_volume) / total_volume
 
       <h3>The Data Collection Daemon</h3>
       <p>
-        A standalone Python process connects to a WebSocket trade stream. Every
-        trade that executes arrives in real time with a critical field:{" "}
-        <code>side</code> — whether the trade was initiated by a buyer or
-        seller. Trades are aggregated into 1-minute buckets:
+        A standalone process connects to a real-time event stream. Every event
+        arrives with a critical field: <code>direction</code> &mdash; whether the
+        action was initiated by the positive or negative side. Events are
+        aggregated into 1-minute buckets:
       </p>
-      <pre><code>{`# ws_collector.py — runs as a separate process
-async def on_trade(msg):
-    """Classify and aggregate each trade."""
-    side = msg["side"]       # "Buy" or "Sell"
-    volume = float(msg["v"]) # trade size
+      <pre><code>{`# collector.py — runs as a separate process
+async def on_event(msg):
+    """Classify and aggregate each event."""
+    direction = msg["direction"]   # "positive" or "negative"
+    magnitude = float(msg["v"])    # event size
 
-    if side == "Buy":
-        bucket.buy_volume += volume
+    if direction == "positive":
+        bucket.positive_flow += magnitude
     else:
-        bucket.sell_volume += volume
-    bucket.total_volume += volume
+        bucket.negative_flow += magnitude
+    bucket.total_flow += magnitude
 
 # Every 60 seconds, compute and store:
-vpin = abs(bucket.buy_vol - bucket.sell_vol) / bucket.total_vol
-imbalance = (bucket.buy_vol - bucket.sell_vol) / bucket.total_vol
+vpin = abs(bucket.pos_flow - bucket.neg_flow) / bucket.total_flow
+imbalance = (bucket.pos_flow - bucket.neg_flow) / bucket.total_flow
 # → write to SQLite database`}</code></pre>
       <p>
         The daemon runs independently with its own lifecycle. It writes to
@@ -152,12 +157,12 @@ imbalance = (bucket.buy_vol - bucket.sell_vol) / bucket.total_vol
       </p>
       <ul>
         <li>
-          <strong>False positive on the cut</strong> — you reduce your action
-          slightly. Cost: a smaller bet that might have been fine.
+          <strong>False positive on the cut</strong> &mdash; you reduce your action
+          slightly. Cost: a smaller commitment that might have been fine.
         </li>
         <li>
-          <strong>False positive on the boost</strong> — you increase your
-          action. Cost: a larger bet that might go wrong.
+          <strong>False positive on the boost</strong> &mdash; you increase your
+          action. Cost: a larger commitment that might go wrong.
         </li>
       </ul>
       <p>
@@ -172,9 +177,10 @@ imbalance = (bucket.buy_vol - bucket.sell_vol) / bucket.total_vol
 
       <h2>Contrarian Signals from Forced Exits</h2>
       <p>
-        The data collector also monitors forced liquidation events. When
-        participants are forced out of their positions, it reveals something
-        about market extremes. We apply <strong>contrarian logic</strong>:
+        The data collector also monitors forced exit events &mdash; when
+        participants are forced out of their positions due to adverse conditions.
+        This reveals something about system extremes. We apply{" "}
+        <strong>contrarian logic</strong>:
       </p>
       <ul>
         <li>
@@ -183,9 +189,9 @@ imbalance = (bucket.buy_vol - bucket.sell_vol) / bucket.total_vol
           capitulation that forces exits often marks the extreme.
         </li>
         <li>
-          <strong>The implication</strong>: after a wave of forced liquidations,
+          <strong>The implication</strong>: after a wave of forced exits,
           the move is more likely to reverse than continue. This is the
-          &ldquo;cascading liquidation exhaustion&rdquo; signal.
+          &ldquo;cascading exhaustion&rdquo; signal.
         </li>
       </ul>
       <p>
@@ -198,7 +204,7 @@ imbalance = (bucket.buy_vol - bucket.sell_vol) / bucket.total_vol
 
       <h2>The Decoupled Architecture</h2>
       <p>
-        The most reusable part of this system isn&rsquo;t the VPIN formula —
+        The most reusable part of this system isn&rsquo;t the VPIN formula &mdash;
         it&rsquo;s the <strong>two-process architecture</strong>:
       </p>
       <pre><code>{`┌─────────────────────┐     ┌──────────────────────┐
@@ -239,7 +245,7 @@ Key design decisions:
       </ul>
       <p>
         SQLite in WAL mode is the bridge. The collector writes without
-        blocking readers. The decision maker reads with a timeout —
+        blocking readers. The decision maker reads with a timeout &mdash;
         if the data is stale or the database is locked, it proceeds
         without the enrichment rather than waiting. This means the decision
         system is <strong>never degraded by the enrichment layer</strong>.
@@ -252,19 +258,19 @@ Key design decisions:
       </p>
       <ul>
         <li>
-          <strong>Social sentiment collector</strong> → writes sentiment scores
-          to SQLite → decision system reads when available
+          <strong>Social sentiment collector</strong> &rarr; writes sentiment scores
+          to SQLite &rarr; decision system reads when available
         </li>
         <li>
-          <strong>Webhook event aggregator</strong> → writes event counts and
-          patterns → monitoring system reads for anomaly detection
+          <strong>Webhook event aggregator</strong> &rarr; writes event counts and
+          patterns &rarr; monitoring system reads for anomaly detection
         </li>
         <li>
-          <strong>User behavior tracker</strong> → writes engagement metrics →
+          <strong>User behavior tracker</strong> &rarr; writes engagement metrics &rarr;
           recommendation engine reads for real-time personalization
         </li>
         <li>
-          <strong>Log pattern detector</strong> → writes error clusters →
+          <strong>Log pattern detector</strong> &rarr; writes error clusters &rarr;
           alerting system reads for intelligent notification
         </li>
       </ul>
@@ -279,7 +285,7 @@ Key design decisions:
       <ol>
         <li>
           <strong>Informed actors reveal information through behavior</strong>.
-          You don&rsquo;t need to know what they know — you just need to
+          You don&rsquo;t need to know what they know &mdash; you just need to
           detect when they&rsquo;re acting and in which direction.
         </li>
         <li>
