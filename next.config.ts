@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
   ...(isGitHubPages && {
     output: "export",
-    basePath: "/portfolio",
     images: { unoptimized: true },
   }),
 };
