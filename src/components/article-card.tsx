@@ -131,7 +131,7 @@ export function ArticleCard({
           onClick={() => setExpanded((prev) => !prev)}
           className={cn(
             "font-mono text-xs tracking-wider text-waste-dim transition-colors hover:text-waste-amber",
-            article.slug && !article.repoUrl ? "flex-1" : article.slug ? "" : "w-full"
+            !article.repoUrl && !article.slug ? "flex-1" : ""
           )}
         >
           {expanded
@@ -154,18 +154,17 @@ export function ArticleCard({
             />
           </svg>
         </Button>
-        {article.slug && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onStar}
-            className={cn(
-              "font-mono text-xs tracking-wider transition-colors",
-              isStarred
-                ? "text-waste-amber"
-                : "text-waste-dim hover:text-waste-amber"
-            )}
-          >
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onStar}
+          className={cn(
+            "font-mono text-xs tracking-wider transition-colors",
+            isStarred
+              ? "text-waste-amber"
+              : "text-waste-dim hover:text-waste-amber"
+          )}
+        >
             <svg
               className={cn("mr-1 h-3 w-3", isStarred ? "fill-current" : "fill-none stroke-current")}
               viewBox="0 0 24 24"
@@ -175,7 +174,6 @@ export function ArticleCard({
             </svg>
             {isStarred ? "STARRED" : "STAR"}
           </Button>
-        )}
         {article.repoUrl && (
           <a
             href={article.repoUrl}
