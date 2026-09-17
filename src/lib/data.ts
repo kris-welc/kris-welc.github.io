@@ -125,7 +125,7 @@ export const ARTICLES: readonly Article[] = [
     imageThumb: "/images/astra-field-test-thumb.jpg",
     imageAlt:
       "A spiral of blue and amber stars with the words UNDER TESTS glowing at its centre",
-    hook: "I gave GPT-6 Astra the same work GPT-5.6 Terra already does for me \u2014 one bug fix, 300 review calls, 24 days of a full research loop \u2014 with tests frozen before either model started. Astra judged better on every measure I could check, never once threw away a good idea, and gave the same verdict every time it was asked. It did not move my outcomes, and that is exactly why I trust the judgment result.",
+    hook: "I gave GPT-6 Astra the same work GPT-5.6 Terra already does for me: one bug fix, 300 review calls, and 24 days of a full research loop. Tests were frozen before either model started. Astra judged better on every measure I could check, never threw away a good idea, and gave the same verdict every time. It did not move my outcomes. That is why I trust the judgment result.",
     tags: ["Model Evaluation", "Agent Judgment", "Measured Results"],
     accent: "toxic",
     readTime: "9 min",
@@ -134,7 +134,7 @@ export const ARTICLES: readonly Article[] = [
       {
         title: "Passing Tests Measures Your Tests",
         summary:
-          "Both models went 100% on a frozen 16-test suite. Reading the patches afterwards found two failures Terra introduced \u2014 a hard-coded timestamp unit and a crash on empty input \u2014 that the suite never asked about.",
+          "Both models went 100% on a frozen 16-test suite. Reading the patches later found two failures Terra introduced (a hard-coded timestamp unit and a crash on empty input) that the suite never asked about.",
       },
       {
         title: "300 Matched Judgment Calls",
@@ -144,17 +144,17 @@ export const ARTICLES: readonly Article[] = [
       {
         title: "Why the 'Safer' Model Looked Safer",
         summary:
-          "Every false acceptance came from one fixture family: a blank falsification field. Terra audited the form; Astra audited the claim. Only one of those is a risk instinct.",
+          "Every false acceptance came from one fixture family: a blank falsification field. Terra audited the form. Astra audited the claim. Only one of those is a risk instinct.",
       },
       {
         title: "The Loop Test Nobody Runs",
         summary:
-          "24 branch-days of propose \u2192 review \u2192 real evaluation \u2192 feed forward, Astra in both roles against my usual Luna proposer and Terra reviewer. Same candidates, same zero promotions \u2014 but Astra needed 25% fewer calls and half the output tokens to get there.",
+          "24 branch-days of propose \u2192 review \u2192 real evaluation \u2192 feed forward, Astra in both roles against my usual Luna proposer and Terra reviewer. Same candidates, same zero promotions, but Astra needed 25% fewer calls and half the output tokens to get there.",
       },
       {
         title: "Split Judgment From Enforcement",
         summary:
-          "Prefer Astra for claim judgment; keep required fields, budgets, and promotion thresholds in deterministic code. Three lines of enforcement erase Astra\u2019s entire false-acceptance category.",
+          "Prefer Astra for claim judgment. Keep required fields, budgets, and promotion thresholds in deterministic code. Three lines of enforcement erase Astra\u2019s entire false-acceptance category.",
       },
     ],
   },
@@ -163,7 +163,7 @@ export const ARTICLES: readonly Article[] = [
     slug: "production-agents",
     date: "2026-03-10",
     title: "4 AI Agents That Actually Run in Production (and How to Deploy Each One)",
-    hook: "Most agent demos break the moment you need them to run unsupervised. Production agents are different: they trigger on webhooks or cron, they handle failures without you, and they cost cents per run. Four real architectures — two that need no orchestrator at all, two that use a simple router loop. Each one solves a problem people actually deal with.",
+    hook: "Most agent demos break the moment you need them to run unsupervised. Production agents are different. They trigger on webhooks or cron, handle failures without you, and cost cents per run. Four real architectures: two with no orchestrator, two with a simple router loop. Each one solves a problem people actually deal with.",
     tags: ["AI Agents", "Production Systems", "Deployment"],
     accent: "toxic",
     readTime: "12 min",
@@ -175,11 +175,11 @@ export const ARTICLES: readonly Article[] = [
       },
       {
         title: "Daily Ops Briefing (No Orchestrator)",
-        summary: "Cron job pulls from 5 tools at 7 AM, LLM writes a 2-minute briefing of what needs attention. 30 seconds to run, $0.02 per day. Replaces 30 min of dashboard-checking.",
+        summary: "Cron job pulls from 5 tools at 7 AM. The LLM writes a 2-minute briefing of what needs attention. 30 seconds to run, $0.02 per day. Replaces 30 min of dashboard-checking.",
       },
       {
         title: "Request Triage Pipeline (With Orchestrator)",
-        summary: "Three agents in sequence: research, score against criteria, route. The orchestrator is 30 lines of routing logic — not a framework. $0.05 per request, saves 15+ hours/week.",
+        summary: "Three agents in sequence: research, score against criteria, route. The orchestrator is 30 lines of routing logic, not a framework. $0.05 per request, saves 15+ hours/week.",
       },
       {
         title: "Codebase Migration (With Orchestrator)",
@@ -192,7 +192,7 @@ export const ARTICLES: readonly Article[] = [
     slug: "control-hierarchy",
     date: "2026-03-05",
     title: "Stop Using AI. Start Building Around It.",
-    hook: "Typing better prompts is not a skill with a future. Wrap the model in systems you control \u2014 memory, tools, checks, and loops. Ten principles, a clear ladder of leverage, and what to own this week.",
+    hook: "Typing better prompts is not a skill with a future. Wrap the model in systems you control: memory, tools, checks, and loops. Ten principles, a clear ladder of leverage, and what to own this week.",
     tags: ["AI Engineering", "System Design", "Leverage"],
     accent: "amber",
     readTime: "10 min",
@@ -204,7 +204,7 @@ export const ARTICLES: readonly Article[] = [
       },
       {
         title: "Systems Beat Prompts",
-        summary: "A structured pipeline (plan \u2192 execute \u2192 verify \u2192 repeat) outperforms any single prompt, no matter how clever.",
+        summary: "A structured pipeline (plan \u2192 execute \u2192 verify \u2192 repeat) beats any single prompt, no matter how clever.",
       },
       {
         title: "Build External Memory",
@@ -212,11 +212,11 @@ export const ARTICLES: readonly Article[] = [
       },
       {
         title: "Tools Over Reasoning",
-        summary: "Models degrade when forced to simulate computation. Let them orchestrate tools instead of replacing them.",
+        summary: "Models get worse when forced to fake computation. Let them call tools instead of replacing them.",
       },
       {
         title: "Where You Sit Matters",
-        summary: "Real advantage starts at workflow design (level 3). Below that is consumption with better packaging.",
+        summary: "Real advantage starts at workflow design (level 3). Below that is consumption with nicer packaging.",
       },
       {
         title: "What to Own",
@@ -229,7 +229,7 @@ export const ARTICLES: readonly Article[] = [
     slug: "agent-algebra",
     date: "2026-02-28",
     title: "Six Ways to Know Your Multi-Agent System Actually Improves",
-    hook: "You built a retry loop, a voting ensemble, a confidence router. How do you know it settles instead of oscillating? Six small Python primitives \u2014 each with a plain-English guarantee.",
+    hook: "You built a retry loop, a voting ensemble, a confidence router. How do you know it settles instead of bouncing around? Six small Python primitives, each with a plain-English guarantee.",
     tags: ["Agent Composition", "Convergence Guarantees", "Open Source"],
     accent: "amber",
     readTime: "12 min",
@@ -238,7 +238,7 @@ export const ARTICLES: readonly Article[] = [
     topics: [
       {
         title: "Will My Loop Settle?",
-        summary: "Each update moves partway toward measured reality. The loop stops when movement is tiny \u2014 not after a fixed N retries.",
+        summary: "Each update moves partway toward measured reality. The loop stops when movement is tiny, not after a fixed N retries.",
       },
       {
         title: "My Agents Are Mediocre Individually",
@@ -246,11 +246,11 @@ export const ARTICLES: readonly Article[] = [
       },
       {
         title: "Which Agent Should I Trust?",
-        summary: "Accuracy is the wrong metric \u2014 calibration is what matters. Reward honest probabilities; the best-calibrated agent gets the most weight.",
+        summary: "Accuracy is the wrong metric. Calibration is what matters. Reward honest probabilities. The best-calibrated agent gets the most weight.",
       },
       {
         title: "How Much Should I Commit?",
-        summary: "Size budgets for surviving a bad streak, not the average universe. Failures cluster; textbook math assumes they don't.",
+        summary: "Size budgets for surviving a bad streak, not the average universe. Failures cluster. Textbook math assumes they don't.",
       },
       {
         title: "My Sources Disagree",
@@ -267,7 +267,7 @@ export const ARTICLES: readonly Article[] = [
     slug: "dual-layer-regime",
     date: "2026-02-28",
     title: "How to Detect When Your System's Rules Stop Working",
-    hook: "One sensor says what mode you're in. Another says you're leaving it. Multiply them so you get cautious during transitions \u2014 before the old rules hurt you.",
+    hook: "One sensor says what mode you're in. Another says you're leaving it. Multiply them so you get cautious during transitions, before the old rules hurt you.",
     tags: ["Adaptive Systems", "Drift Detection", "Mode Classification"],
     accent: "toxic",
     readTime: "8 min",
@@ -275,7 +275,7 @@ export const ARTICLES: readonly Article[] = [
     topics: [
       {
         title: "Useful vs Wasted Movement",
-        summary: "How much of the total movement was productive? Five modes from CLEAR to CHAOS let you respond proportionally.",
+        summary: "How much of the total movement was productive? Five modes from CLEAR to CHAOS let you respond in steps.",
       },
       {
         title: "Transition Detection",
@@ -283,11 +283,11 @@ export const ARTICLES: readonly Article[] = [
       },
       {
         title: "Graduated Response",
-        summary: "Defensive signals still work in noise; optimistic ones don't. Block hope-driven actions when the stream is chaotic.",
+        summary: "Defensive signals still work in noise. Optimistic ones don't. Block hope-driven actions when the stream is chaotic.",
       },
       {
         title: "Multiply the Two Layers",
-        summary: "Mode confidence \u00d7 transition caution. Most conservative during noisy transitions \u2014 no manual rules needed.",
+        summary: "Mode confidence \u00d7 transition caution. Most conservative during noisy transitions. No manual rules needed.",
       },
     ],
   },
@@ -296,7 +296,7 @@ export const ARTICLES: readonly Article[] = [
     slug: "vpin-conviction",
     date: "2026-02-28",
     title: "When Experts Disagree With You, Cut Confidence Harder",
-    hook: "Watch what the best-informed people do. If they oppose you, trust yourself less \u2014 more than you trust yourself more when they agree. Hiring, product, and content all work the same way.",
+    hook: "Watch what the best-informed people do. If they oppose you, trust yourself less - more than you trust yourself more when they agree. Hiring, product, and content all work the same way.",
     tags: ["Decision Systems", "Informed Flow", "Real-Time Enrichment"],
     accent: "rust",
     readTime: "6 min",
@@ -304,15 +304,15 @@ export const ARTICLES: readonly Article[] = [
     topics: [
       {
         title: "Measuring Informed Activity",
-        summary: "Imbalance between opposing flows reveals when knowledgeable participants are acting and which way they lean.",
+        summary: "Imbalance between opposing flows shows when knowledgeable people are acting and which way they lean.",
       },
       {
         title: "Asymmetric Confidence Adjustment",
-        summary: "Modest boost when experts agree; larger cut when they disagree. Missing an opportunity costs less than overcommitting.",
+        summary: "Small boost when experts agree. Larger cut when they disagree. Missing a chance costs less than overcommitting.",
       },
       {
         title: "Decoupled Real-Time Architecture",
-        summary: "Collector writes; decision maker reads with a timeout. Enrichment is always additive, never blocking.",
+        summary: "Collector writes. Decision maker reads with a timeout. Enrichment is always additive, never blocking.",
       },
     ],
   },
@@ -328,7 +328,7 @@ export const ARTICLES: readonly Article[] = [
       {
         title: "AI System Architecture",
         summary:
-          "Designing systems where AI, automation, and humans work together. A thinking skill, not a technical skill — understanding business operations, data flow, and how pieces connect.",
+          "Designing systems where AI, automation, and humans work together. A thinking skill, not a technical skill - understanding business operations, data flow, and how pieces connect.",
       },
       {
         title: "Context Engineering",
@@ -353,7 +353,7 @@ export const ARTICLES: readonly Article[] = [
       {
         title: "AI Output Quality Control",
         summary:
-          "Evaluating AI output at scale — catching errors, identifying generic versus useful output, building systems for consistent quality. Bad AI output is expensive.",
+          "Evaluating AI output at scale - catching errors, identifying generic versus useful output, building systems for consistent quality. Bad AI output is expensive.",
       },
       {
         title: "Automation Maintenance",
@@ -365,7 +365,7 @@ export const ARTICLES: readonly Article[] = [
   {
     id: "vibe-coding-2-rules",
     title: "10 Decisions That Separate Builders Who Ship From Builders Who Don't",
-    hook: "Defaults for a Next.js SaaS MVP. You're not slow because you're a bad developer \u2014 you're slow because of tool choices that feel professional but add weeks of work you don't need yet.",
+    hook: "Defaults for a Next.js SaaS MVP. You're not slow because you're a bad developer - you're slow because of tool choices that feel professional but add weeks of work you don't need yet.",
     tags: ["Development", "Shipping", "Tools"],
     accent: "toxic",
     readTime: "8 min",
@@ -414,7 +414,7 @@ export const ARTICLES: readonly Article[] = [
       {
         title: "README + Predictable Folders",
         summary:
-          "20 minutes of structure saves hours later. Components, hooks, utils, types — keep it boring.",
+          "20 minutes of structure saves hours later. Components, hooks, utils, types - keep it boring.",
       },
       {
         title: "Empty States + Lighthouse Before Launch",
@@ -461,7 +461,7 @@ export const SIDE_PROJECTS: readonly SideProject[] = [
     name: "Intel Digest",
     stack: "Python + Gemini",
     description:
-      "AI-powered news curation across 4 channels — tech, wellness, jobs, and personal. LLM-scored with customizable delivery.",
+      "AI-powered news curation across 4 channels - tech, wellness, jobs, and personal. LLM-scored with customizable delivery.",
     accent: "toxic",
   },
 ] as const;

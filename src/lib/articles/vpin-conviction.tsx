@@ -3,7 +3,7 @@ export function VpinConvictionContent() {
     <>
       <p>
         <strong>In one sentence:</strong> watch what the best-informed people
-        do. If they oppose you, cut your confidence harder than you boost it when
+        do. If they oppose you, cut your confidence harder than you raise it when
         they agree.
       </p>
 
@@ -11,41 +11,41 @@ export function VpinConvictionContent() {
       <p>
         Imagine you&rsquo;re about to make an important decision. You have your
         own analysis and you&rsquo;re 70% confident. Then you learn that the
-        people with the <em>best</em> information &mdash; domain experts,
-        experienced operators, the ones who consistently know first &mdash; are
-        acting in the <strong>opposite direction</strong>.
+        people with the <em>best</em> information (domain experts, experienced
+        operators, the ones who usually know first) are acting in the{" "}
+        <strong>opposite direction</strong>.
       </p>
       <p>
         Do you still have 70% confidence? Of course not. Your confidence should
-        drop. And if those informed actors were acting in the <em>same</em>{" "}
-        direction as you? Your confidence should increase &mdash; but less than
-        the cut, because overcommitting costs more than missing a good chance.
+        drop. And if those informed people were acting the <em>same</em> way as
+        you? Your confidence should go up - but less than the cut, because
+        overcommitting costs more than missing a good chance.
       </p>
       <p>
         That&rsquo;s the whole article: <strong>measure when experts are acting
-        and which way they lean, then adjust your confidence
-        asymmetrically</strong>. You don&rsquo;t need to know what they know.
-        You need their direction and intensity.
+        and which way they lean, then adjust your confidence unevenly</strong>.
+        You don&rsquo;t need to know what they know. You need their direction and
+        intensity.
       </p>
 
       <h2>Start With Domains You Already Know</h2>
       <ul>
         <li>
-          <strong>Hiring</strong> &mdash; when several experienced interviewers
+          <strong>Hiring</strong> - when several experienced interviewers
           independently agree, raise confidence. When a respected interviewer
           dissents, cut harder than a confirming vote boosts you.
         </li>
         <li>
-          <strong>Product</strong> &mdash; your most engaged power users changing
+          <strong>Product</strong> - your most engaged power users changing
           behavior tells you more than aggregate analytics from casual users.
         </li>
         <li>
-          <strong>Content / open source</strong> &mdash; experts engaging early
-          is a positive signal; respected maintainers abandoning a library is an
-          exit signal.
+          <strong>Content / open source</strong> - experts engaging early is a
+          positive signal. Respected maintainers leaving a library is an exit
+          signal.
         </li>
         <li>
-          <strong>Fraud / abuse</strong> &mdash; a surge of activity from
+          <strong>Fraud / abuse</strong> - a surge of activity from
           known-sophisticated accounts is high informed flow.
         </li>
       </ul>
@@ -58,7 +58,7 @@ export function VpinConvictionContent() {
       </blockquote>
       <p>
         The measurement trick below comes from market research (Easley, L&oacute;pez
-        de Prado, O&rsquo;Hara, 2012). The rule is general; the origin is markets.
+        de Prado, O&rsquo;Hara, 2012). The rule is general. The origin is markets.
       </p>
 
       <hr />
@@ -78,8 +78,8 @@ export function VpinConvictionContent() {
 
 # 0.00 → perfectly balanced
 # 0.05 → normal noise
-# 0.20 → significant imbalance — informed actors present
-# 0.50 → extreme — one side dominates`}</code></pre>
+# 0.20 → significant imbalance - informed actors present
+# 0.50 → extreme - one side dominates`}</code></pre>
       <p>
         The original work was retrospective (daily buckets after the fact). The
         useful upgrade is running it live on short buckets and feeding it into
@@ -90,8 +90,8 @@ export function VpinConvictionContent() {
 
       <h2>The Confidence Adjustment Rules</h2>
       <p>
-        Treat confidence on a <strong>0.0&ndash;1.0</strong> scale (or any
-        bounded scale you already use). Adjust asymmetrically:
+        Treat confidence on a <strong>0.0-1.0</strong> scale (or any bounded
+        scale you already use). Adjust asymmetrically:
       </p>
       <pre><code>{`def adjust_confidence(confidence, my_direction, informed_ratio, imbalance):
     """confidence: 0.0 to 1.0
@@ -116,27 +116,27 @@ export function VpinConvictionContent() {
       <h3>Why the Asymmetry?</h3>
       <ul>
         <li>
-          <strong>False cut</strong> &mdash; you take a smaller action. Cost:
-          maybe you under-committed on something fine.
+          <strong>False cut</strong> - you take a smaller action. Cost: maybe you
+          under-committed on something fine.
         </li>
         <li>
-          <strong>False boost</strong> &mdash; you increase commitment. Cost: a
-          larger mistake.
+          <strong>False boost</strong> - you increase commitment. Cost: a larger
+          mistake.
         </li>
       </ul>
       <p>
         Missing a good opportunity is cheaper than overcommitting to a bad one.
         Same rule in hiring: a dissenting expert should move you more than a
-        confirming one. Same in product: power users disengaging should alarm
-        you more than engagement reassures you.
+        confirming one. Same in product: power users leaving should alarm you
+        more than engagement reassures you.
       </p>
 
       <hr />
 
       <h2>Architecture: Decouple Collection from Decisions</h2>
       <p>
-        The reusable part isn&rsquo;t the formula &mdash; it&rsquo;s the
-        two-process layout:
+        The reusable part isn&rsquo;t the formula. It&rsquo;s the two-process
+        layout:
       </p>
       <p>
         <strong>Process A: Collector</strong> &rarr; ingests events, aggregates
@@ -148,14 +148,14 @@ export function VpinConvictionContent() {
       </p>
       <ul>
         <li>
-          <strong>Short read timeout</strong> &mdash; never block the decision
+          <strong>Short read timeout</strong> - never block the decision
         </li>
         <li>
-          <strong>No shared mutable state</strong> &mdash; either process can
-          restart alone
+          <strong>No shared mutable state</strong> - either process can restart
+          alone
         </li>
         <li>
-          <strong>Enrichment is additive</strong> &mdash; never a hard gate
+          <strong>Enrichment is additive</strong> - never a hard gate
         </li>
       </ul>
       <p>
@@ -169,7 +169,7 @@ export function VpinConvictionContent() {
       <ol>
         <li>
           <strong>Informed actors reveal information through behavior</strong>.
-          Detect when and which way &mdash; you don&rsquo;t need their private
+          Detect when and which way. You don&rsquo;t need their private
           knowledge.
         </li>
         <li>

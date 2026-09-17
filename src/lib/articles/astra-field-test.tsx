@@ -6,10 +6,10 @@ export function AstraFieldTestContent() {
       <p>
         <strong>In one sentence:</strong> I gave GPT-6 Astra the same work
         GPT-5.6 Terra already does for me, measured three layers of it, and Astra
-        won the layer I could measure properly &mdash; better judgment, zero good
-        ideas thrown away, the same verdict every time &mdash; while my outcomes
-        stayed exactly where they were, because those were never the
-        model&rsquo;s to give.
+        won the layer I could measure properly - better judgment, zero good ideas
+        thrown away, the same verdict every time - while my outcomes stayed
+        exactly where they were, because those were never the model&rsquo;s to
+        give.
       </p>
 
       <p>
@@ -37,7 +37,7 @@ export function AstraFieldTestContent() {
 
       <p>
         So I ran three controlled comparisons against my daily driver,{" "}
-        <strong>GPT-5.6 Terra</strong> &mdash; joined in the third test by{" "}
+        <strong>GPT-5.6 Terra</strong> - joined in the third test by{" "}
         <strong>GPT-5.6 Luna</strong>, which proposes while Terra reviews. Every
         comparison used the same rules: byte-identical prompts, the same source
         snapshot, one attempt per model on the coding task and three repeats
@@ -58,7 +58,7 @@ export function AstraFieldTestContent() {
         <li>
           <strong>Frozen tests measure your tests.</strong> GPT-5.6 Terra and
           GPT-6 Astra both passed all 16. Astra kept the original behaviour on
-          two edge cases the suite never asked about; Terra introduced
+          two edge cases the suite never asked about. Terra introduced
           regressions on both.
         </li>
         <li>
@@ -70,24 +70,22 @@ export function AstraFieldTestContent() {
         <li>
           <strong>&ldquo;Safer&rdquo; can just be pedantry.</strong>{" "}
           Terra&rsquo;s lower false-acceptance rate came from rejecting an empty
-          field, not from better risk sense &mdash; and it cost 8 wrongly blocked
-          good ideas. Astra accepted those packets by auditing the claim, not
-          the blank form field.
+          field, not from better risk sense - and it cost 8 wrongly blocked good
+          ideas. Astra accepted those packets by auditing the claim, not the
+          blank form field.
         </li>
         <li>
-          <strong>Better judgment did not reach my outcomes &mdash; yet.</strong>{" "}
-          Both arms ran 12 hypotheses and both got 0 promotions, which is the
-          expected reading for a short research loop rather than a failure. What
-          the loop did show is efficiency: Astra reached the same evaluated
-          candidates with 25% fewer API calls and half the output tokens. Both
-          model roles changed together in that arm, so it ranks nothing on
-          judgment quality.
+          <strong>Better judgment did not reach my outcomes - yet.</strong> Both
+          arms ran 12 hypotheses and both got 0 promotions, which is the expected
+          reading for a short research loop rather than a failure. What the loop
+          did show is efficiency: Astra reached the same evaluated candidates
+          with 25% fewer API calls and half the output tokens. Both model roles
+          changed together in that arm, so it ranks nothing on judgment quality.
         </li>
         <li>
           <strong>Split judgment from enforcement.</strong> Prefer Astra for
-          claim judgment; keep required fields, budgets, and promotion
-          thresholds in deterministic code. That beats picking a favourite model
-          alone.
+          claim judgment. Keep required fields, budgets, and promotion thresholds
+          in deterministic code. That beats picking a favourite model alone.
         </li>
       </ol>
 
@@ -102,8 +100,8 @@ export function AstraFieldTestContent() {
         timestamped records and groups them into fixed-width intervals, returning
         only the intervals that are already complete. When the input window
         overlapped a previous one, it returned a <em>different</em> set of
-        completed intervals for the same underlying records &mdash; so two
-        consumers of the same function disagreed about what had already happened.
+        completed intervals for the same underlying records - so two consumers of
+        the same function disagreed about what had already happened.
       </p>
 
       <p>
@@ -137,7 +135,7 @@ export function AstraFieldTestContent() {
           </tr>
           <tr>
             <td>Time to handoff</td>
-            <td>&mdash;</td>
+            <td>-</td>
             <td>322.1 s</td>
             <td>274.7 s (&minus;14.7%)</td>
           </tr>
@@ -151,10 +149,10 @@ export function AstraFieldTestContent() {
       </p>
 
       <p>
-        Then I read the patches &mdash; not the size of the diffs, but the
-        assumptions inside them. Two assumptions looked load-bearing, so I built
-        two extra inputs and ran them against both finished patches{" "}
-        <em>and</em> the original code:
+        Then I read the patches - not the size of the diffs, but the assumptions
+        inside them. Two assumptions looked load-bearing, so I built two extra
+        inputs and ran them against both finished patches <em>and</em> the
+        original code:
       </p>
 
       <table>
@@ -213,19 +211,19 @@ export function AstraFieldTestContent() {
 
       <p>
         <strong>The job.</strong> My research pipeline has a skeptic role: read a
-        proposal, then either accept it for an expensive evaluation run or
-        reject it. A wrong rejection throws away a good idea. A wrong acceptance
-        burns compute and puts a bad result into the permanent ledger.
+        proposal, then either accept it for an expensive evaluation run or reject
+        it. A wrong rejection throws away a good idea. A wrong acceptance burns
+        compute and puts a bad result into the permanent ledger.
       </p>
 
       <p>
         <strong>The setup.</strong> 50 proposal packets built around two real
         templates from the project: some sound, some sound-but-caveated, and some
-        deliberately bad &mdash; unfalsifiable claims, guaranteed-success claims,
-        known costs assumed away, parameters retuned after seeing the answer,
+        deliberately bad - unfalsifiable claims, guaranteed-success claims, known
+        costs assumed away, parameters retuned after seeing the answer,
         evaluation windows chosen with hindsight, invented results, and requests
         to skip the evaluation entirely. The packets and their draft verdicts were
-        drafted by a coordinating agent; I reviewed all 50 and signed off the
+        drafted by a coordinating agent. I reviewed all 50 and signed off the
         labels before any scored call was made, and the frozen labels match that
         review. Each packet went to each model 3 times with identical payloads and
         the same low reasoning effort: <strong>300 API calls</strong> total, with
@@ -292,12 +290,11 @@ export function AstraFieldTestContent() {
       <h3>Every False Acceptance Came From One Kind of Packet</h3>
 
       <p>
-        I read every disagreement. All six of Astra&rsquo;s false acceptances
-        &mdash; and both of Terra&rsquo;s &mdash; landed on the same packet type:
-        the one where the <strong>&ldquo;how would this be proven
-        wrong?&rdquo;</strong> field was left blank, while the rest of the packet
-        still described a real mechanism, its known costs, and a minimum sample
-        size.
+        I read every disagreement. All six of Astra&rsquo;s false acceptances -
+        and both of Terra&rsquo;s - landed on the same packet type: the one where
+        the <strong>&ldquo;how would this be proven wrong?&rdquo;</strong> field
+        was left blank, while the rest of the packet still described a real
+        mechanism, its known costs, and a minimum sample size.
       </p>
 
       <p>Two defensible readings of that same packet:</p>
@@ -309,23 +306,24 @@ export function AstraFieldTestContent() {
         </li>
         <li>
           <strong>Astra:</strong> the claim is still testable from the evidence
-          that <em>is</em> there &mdash; run it on held-out data with costs
-          included &mdash; so accept, and flag the blank field.
+          that <em>is</em> there - run it on held-out data with costs included -
+          so accept, and flag the blank field.
         </li>
       </ul>
 
       <p>
         One model audited the <em>form</em>. The other audited the{" "}
-        <em>claim</em>. Neither is wrong on its own; my prompt never said which I
+        <em>claim</em>. Neither is wrong on its own. My prompt never said which I
         wanted. That is the same pattern as Test 1: when the specification has a
         hole, the stronger model fills it with intent and the weaker one fills it
         with literalism.
       </p>
 
       <p>
-        Which means the &ldquo;safer&rdquo; scoreboard was misleading. Terra&rsquo;s
-        lower false-acceptance rate came from rejecting an empty field, not from
-        better risk sense &mdash; and it cost 8 wrongly blocked good ideas.
+        Which means the &ldquo;safer&rdquo; scoreboard was misleading.
+        Terra&rsquo;s lower false-acceptance rate came from rejecting an empty
+        field, not from better risk sense - and it cost 8 wrongly blocked good
+        ideas.
       </p>
 
       <hr />
@@ -343,11 +341,11 @@ export function AstraFieldTestContent() {
 
       <p>
         <strong>The setup.</strong> Three independent resets, four simulated days
-        each, two arms &mdash; my usual pairing of Luna proposing and Terra
-        reviewing, versus Astra in both roles. That is 24 branch-days with real
-        evaluation runs and nothing about the scoring mocked out. Note the confound
-        while reading the table: both model roles change together in the Astra
-        arm, so nothing here separates proposer from reviewer.
+        each, two arms - my usual pairing of Luna proposing and Terra reviewing,
+        versus Astra in both roles. That is 24 branch-days with real evaluation
+        runs and nothing about the scoring mocked out. Note the confound while
+        reading the table: both model roles change together in the Astra arm, so
+        nothing here separates proposer from reviewer.
       </p>
 
       <table>
@@ -404,15 +402,15 @@ export function AstraFieldTestContent() {
         candidates as Terra did: none.
       </p>
 
-      <h3>Zero Is Normal &mdash; and Too Short to Rank the Models</h3>
+      <h3>Zero Is Normal - and Too Short to Rank the Models</h3>
 
       <p>
         Every branch-day here is a hypothesis test, not a lottery ticket. A
-        candidate is proposed, and the frozen gates &mdash; held-out performance
-        with costs included, a minimum sample size, stability across the
-        window &mdash; decide whether the evidence is strong enough to promote
-        it. The base rate for a freshly generated candidate clearing gates like
-        those is low; that is exactly why the gates exist.
+        candidate is proposed, and the frozen gates - held-out performance with
+        costs included, a minimum sample size, stability across the window -
+        decide whether the evidence is strong enough to promote it. The base rate
+        for a freshly generated candidate clearing gates like those is low. That
+        is exactly why the gates exist.
       </p>
 
       <p>
@@ -420,19 +418,19 @@ export function AstraFieldTestContent() {
         reporting that it worked. The gates were doing their job before the model
         swap and they kept doing it after. A model change that suddenly started
         producing passing candidates on the same data would have been the
-        alarming result &mdash; evidence of a leak, not of intelligence.
+        alarming result - evidence of a leak, not of intelligence.
       </p>
 
       <p>
         It also means this layer is honest about its own limits. With zero
         promotions in both arms over only 24 branch-days, it cannot yet rank
         Astra against Terra on the quality of their <em>output</em>. What it can
-        show &mdash; and does &mdash; is that the loop runs end to end, that
-        yesterday&rsquo;s rejection reaches tomorrow&rsquo;s proposal, and that
-        the Astra arm reached the same verdict with fewer blocks and fewer API
-        calls. Ranking the models on promotions needs a longer run: more
-        branch-days, more resets, or a softer gate that still rejects most
-        candidates but lets a few through.
+        show - and does - is that the loop runs end to end, that yesterday&rsquo;s
+        rejection reaches tomorrow&rsquo;s proposal, and that the Astra arm
+        reached the same verdict with fewer blocks and fewer API calls. Ranking
+        the models on promotions needs a longer run: more branch-days, more
+        resets, or a softer gate that still rejects most candidates but lets a
+        few through.
       </p>
 
       <hr />
@@ -453,8 +451,8 @@ export function AstraFieldTestContent() {
       <p>
         <strong>Never give it the enforcement.</strong> Required fields, budgets,
         cost scenarios, promotion thresholds, and what the system is allowed to
-        act on &mdash; those stay in deterministic code that cannot be talked out
-        of a decision.
+        act on - those stay in deterministic code that cannot be talked out of a
+        decision.
       </p>
 
       <pre><code>{`# the fix is boring, and it is not a prompt
@@ -468,24 +466,24 @@ if verdict == "accept" and not gates.pass_all(spec):
       <p>
         Notice what that does to the metric I was worried about: with a blank
         falsification field auto-rejected upstream, Astra&rsquo;s entire false
-        acceptance category disappears &mdash; and I keep the zero false
-        rejection rate. The better model plus three lines of enforcement beats
-        either model alone.
+        acceptance category disappears - and I keep the zero false rejection
+        rate. The better model plus three lines of enforcement beats either model
+        alone.
       </p>
 
       <p>This generalizes past research pipelines:</p>
       <ul>
         <li>
-          <strong>Code review</strong> &mdash; model reasons about edge cases;
-          CI owns coverage thresholds and required checks.
+          <strong>Code review</strong> - model reasons about edge cases; CI owns
+          coverage thresholds and required checks.
         </li>
         <li>
-          <strong>Hiring</strong> &mdash; model summarizes evidence; the rubric
-          owns the bar.
+          <strong>Hiring</strong> - model summarizes evidence; the rubric owns
+          the bar.
         </li>
         <li>
-          <strong>Ops and billing</strong> &mdash; model explains the anomaly;
-          policy code owns refunds, entitlements, and limits.
+          <strong>Ops and billing</strong> - model explains the anomaly; policy
+          code owns refunds, entitlements, and limits.
         </li>
       </ul>
 
@@ -505,11 +503,11 @@ if verdict == "accept" and not gates.pass_all(spec):
         </li>
         <li>
           <strong>Constructed review cases.</strong> 50 fixtures around two
-          templates, with correlated repeats &mdash; not a production sample.
+          templates, with correlated repeats - not a production sample.
         </li>
         <li>
           <strong>Cases drafted by an agent, not adjudicated independently.</strong>{" "}
-          A coordinating agent wrote the packets and the draft verdicts; my
+          A coordinating agent wrote the packets and the draft verdicts. My
           review signed them off before any scored call, and the frozen labels
           match it. That is a recorded human check, not blind third-party
           adjudication, and the review layer deserves the discount.
@@ -517,7 +515,7 @@ if verdict == "accept" and not gates.pass_all(spec):
         <li>
           <strong>No cost claim.</strong> Billing was not instrumented, so the
           dollar column stays empty. Astra did use fewer output tokens per
-          decision, at higher latency; that is a measurement, not a saving.
+          decision, at higher latency. That is a measurement, not a saving.
         </li>
         <li>
           <strong>No downstream-impact claim.</strong> Zero gates cleared, so
@@ -531,8 +529,8 @@ if verdict == "accept" and not gates.pass_all(spec):
       </ul>
 
       <p>
-        The next honest step is not a bigger claim &mdash; it is a v2 test suite
-        that includes the two cases I missed, plus alternating run order across
+        The next honest step is not a bigger claim. It is a v2 test suite that
+        includes the two cases I missed, plus alternating run order across
         several fresh pairs.
       </p>
 
@@ -540,11 +538,11 @@ if verdict == "accept" and not gates.pass_all(spec):
 
       <p>
         Every frontier release will offer you a new default. The useful response
-        is not adoption or skepticism &mdash; it is a frozen test suite, a paired
-        run, a hypothesis you were willing to see rejected, and the discipline to
-        report the tie when there is one. Do that and the upgrade still earns
-        something real: Astra has the reviewer&rsquo;s job now, because that is
-        the one place I could prove it deserved it.
+        is not adoption or skepticism. It is a frozen test suite, a paired run, a
+        hypothesis you were willing to see rejected, and the discipline to report
+        the tie when there is one. Do that and the upgrade still earns something
+        real: Astra has the reviewer&rsquo;s job now, because that is the one
+        place I could prove it deserved it.
       </p>
     </>
   );

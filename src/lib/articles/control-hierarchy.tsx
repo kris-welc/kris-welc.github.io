@@ -3,23 +3,21 @@ export function ControlHierarchyContent() {
     <>
       <p>
         <strong>In one sentence:</strong> AI is useful only if you wrap it in
-        systems you control &mdash; memory, tools, checks, and loops.
+        systems you control - memory, tools, checks, and loops.
       </p>
 
       <h2>Why This Article Exists</h2>
       <p>
-        If you use AI through a chat window &mdash; type a question, get an
-        answer, move on &mdash; you are a <strong>consumer</strong>. You have
-        zero control over what the system does, how it reasons, or whether its
-        output is correct.
+        If you use AI through a chat window (type a question, get an answer, move
+        on), you are a <strong>consumer</strong>. You have zero control over what
+        the system does, how it reasons, or whether its output is correct.
       </p>
       <p>
-        This article is about moving out of that position. The people who will
-        define the next decade are not the ones typing better prompts. They are
-        the ones building the systems that contain, direct, and verify AI
-        &mdash; pipelines, memory layers, tool orchestration, and evaluation
-        loops that turn a model from an oracle you hope is right into a
-        component you control.
+        This article is about leaving that spot. The people who will define the
+        next decade are not the ones typing better prompts. They are the ones
+        building the systems that contain, direct, and check AI: pipelines,
+        memory layers, tool orchestration, and evaluation loops that turn a model
+        from an oracle you hope is right into a component you control.
       </p>
       <blockquote>
         <p>
@@ -35,7 +33,7 @@ export function ControlHierarchyContent() {
       <h3>1. Models Are Components, Not Authorities</h3>
       <p>
         Language models produce probabilistic text. They do not verify truth,
-        maintain coherent world models, or guarantee consistency. Their role is{" "}
+        keep a coherent world model, or guarantee consistency. Their job is{" "}
         <strong>generation</strong>, not judgment.
       </p>
       <p>
@@ -59,10 +57,10 @@ export function ControlHierarchyContent() {
   ↓ repeat`}</code></pre>
       <p>
         Schemas, structured outputs, post-processing, retry and evaluation loops.
-        The model is one stage &mdash; not the pipeline.
+        The model is one stage, not the pipeline.
       </p>
 
-      <h3>3. Context Windows Are Temporary &mdash; Build External State</h3>
+      <h3>3. Context Windows Are Temporary - Build External State</h3>
       <p>
         Without persistent memory, the system resets every interaction. Keep four
         layers:
@@ -101,11 +99,10 @@ export function ControlHierarchyContent() {
 
       <h3>4. Use Tools Instead of Reasoning</h3>
       <p>
-        Models degrade when forced to simulate computation. Correct pattern:{" "}
+        Models get worse when forced to fake computation. Correct pattern:{" "}
         <strong>model decides which tool &rarr; tool computes &rarr; model
         interprets</strong>. Math to Python. Search to retrieval. Data to SQL.
-        Verification to tests. The model orchestrates tools. It does not replace
-        them.
+        Verification to tests. The model calls tools. It does not replace them.
       </p>
 
       <h3>5. Control Loops Replace Single Prompts</h3>
@@ -130,8 +127,8 @@ export function ControlHierarchyContent() {
 
       <h3>7. Separate Planning from Execution</h3>
       <p>
-        Planner decomposes goals. Workers do narrow steps. Tools produce results.
-        The planner doesn&rsquo;t invent implementation details; the worker
+        Planner breaks down goals. Workers do narrow steps. Tools produce results.
+        The planner doesn&rsquo;t invent implementation details. The worker
         doesn&rsquo;t invent strategy.
       </p>
 
@@ -197,8 +194,8 @@ export function ControlHierarchyContent() {
         </tbody>
       </table>
       <p>
-        Everything below level 3 is consumption with better packaging. As models
-        get cheaper, durable advantage moves further up: unique data, automated
+        Everything below level 3 is consumption with nicer packaging. As models
+        get cheaper, lasting advantage moves further up: unique data, automated
         end-to-end processes, and the ability to deploy and monitor agents you
         own.
       </p>
@@ -207,16 +204,16 @@ export function ControlHierarchyContent() {
       </p>
       <ol>
         <li>
-          <strong>Unique data</strong> &mdash; industry, behavioral, operational.
-          Models commoditize; proprietary data doesn&rsquo;t.
+          <strong>Unique data</strong> - industry, behavioral, operational.
+          Models commoditize. Proprietary data doesn&rsquo;t.
         </li>
         <li>
-          <strong>Automated processes</strong> &mdash; detect &rarr; analyze
-          &rarr; produce &rarr; ship without babysitting every step.
+          <strong>Automated processes</strong> - detect &rarr; analyze &rarr;
+          produce &rarr; ship without babysitting every step.
         </li>
         <li>
-          <strong>Agent infrastructure</strong> &mdash; deploy, monitor, and
-          improve systems that run without you.
+          <strong>Agent infrastructure</strong> - deploy, monitor, and improve
+          systems that run without you.
         </li>
       </ol>
 
@@ -228,31 +225,31 @@ export function ControlHierarchyContent() {
       </p>
       <ul>
         <li>
-          <strong>Research loop</strong> &mdash; crawl sources, rank changes,
-          write a daily brief.
+          <strong>Research loop</strong> - crawl sources, rank changes, write a
+          daily brief.
         </li>
         <li>
-          <strong>Ops briefing</strong> &mdash; pull five dashboards into one
-          morning message of what needs attention.
+          <strong>Ops briefing</strong> - pull five dashboards into one morning
+          message of what needs attention.
         </li>
         <li>
-          <strong>Draft factory</strong> &mdash; topic in, structured draft out,
-          human edits the judgment calls.
+          <strong>Draft factory</strong> - topic in, structured draft out, human
+          edits the judgment calls.
         </li>
         <li>
-          <strong>Triage pipeline</strong> &mdash; enrich inbound requests, score
+          <strong>Triage pipeline</strong> - enrich inbound requests, score
           priority, route high ones to a human.
         </li>
       </ul>
       <p>
-        (For full deploy patterns &mdash; cron vs webhook, when you need a router
-        loop &mdash; see the Production Agents dispatch.)
+        (For full deploy patterns - cron vs webhook, when you need a router loop
+        - see the Production Agents dispatch.)
       </p>
       <blockquote>
         <p>
           The point is not to use AI better. The point is to build systems that
-          use AI &mdash; and then own those systems. Start with one pipeline, one
-          memory layer, one evaluation loop.
+          use AI, and then own those systems. Start with one pipeline, one memory
+          layer, one evaluation loop.
         </p>
       </blockquote>
     </>

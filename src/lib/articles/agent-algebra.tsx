@@ -25,14 +25,14 @@ export function AgentAlgebraContent() {
       <p>
         Now the uncomfortable question: <strong>how do you know it actually
         gets better over time?</strong> How do you know the retry loop settles
-        instead of oscillating? How do you know your voting system doesn&rsquo;t
-        amplify the worst agent&rsquo;s mistakes? How do you know your confidence
-        scores mean anything?
+        instead of bouncing around? How do you know your voting system
+        doesn&rsquo;t amplify the worst agent&rsquo;s mistakes? How do you know
+        your confidence scores mean anything?
       </p>
       <p>
-        Most systems answer that with plumbing &mdash; connect things, run them,
-        hope. This article gives you six primitives with a specific guarantee
-        each. You can install them as pure Python (standard library only) today.
+        Most systems answer that with plumbing: connect things, run them, hope.
+        This article gives you six primitives with a specific guarantee each. You
+        can install them as pure Python (standard library only) today.
       </p>
 
       <h2>A Concrete Story First</h2>
@@ -40,7 +40,7 @@ export function AgentAlgebraContent() {
         Suppose you have a retry loop that runs five times and picks the best
         draft. Iteration 3 scored well. Iteration 5 scored worse. You shipped
         iteration 5 because &ldquo;more tries = better.&rdquo; That isn&rsquo;t
-        improvement &mdash; it&rsquo;s random search with extra latency.
+        improvement. It&rsquo;s random search with extra latency.
       </p>
       <p>
         Primitive 1 fixes that: each update must move <em>partway</em> toward
@@ -53,19 +53,19 @@ export function AgentAlgebraContent() {
       <h2>Who Should Read This</h2>
       <ul>
         <li>
-          <strong>LLM pipelines</strong> — retry loops, multi-model voting,
+          <strong>LLM pipelines</strong> - retry loops, multi-model voting,
           refinement, RAG quality scoring
         </li>
         <li>
-          <strong>Recommendation / moderation</strong> — combining scorers,
+          <strong>Recommendation / moderation</strong> - combining scorers,
           cascading classifiers
         </li>
         <li>
-          <strong>Autonomous agents</strong> — calibration, routing, resource
+          <strong>Autonomous agents</strong> - calibration, routing, resource
           limits
         </li>
         <li>
-          <strong>Forecasting</strong> — combining expert probabilities without
+          <strong>Forecasting</strong> - combining expert probabilities without
           letting overconfidence win
         </li>
       </ul>
@@ -113,10 +113,10 @@ export function AgentAlgebraContent() {
         </tbody>
       </table>
       <p>
-        (Under the hood these map to classic results &mdash; fixed-point
-        contraction, boosting, proper scoring, path-dependent survival, belief
-        propagation, minimum description length. You don&rsquo;t need the names
-        to use the primitives.)
+        (Under the hood these map to classic results: fixed-point contraction,
+        boosting, proper scoring, path-dependent survival, belief propagation,
+        minimum description length. You don&rsquo;t need the names to use the
+        primitives.)
       </p>
 
       <hr />
@@ -127,7 +127,7 @@ export function AgentAlgebraContent() {
       <p>
         Feedback loops are everywhere: generate, evaluate, feed back, try again.
         Most retry loops run for N iterations and take the best one. That&rsquo;s
-        not settling &mdash; that&rsquo;s random search.
+        not settling. That&rsquo;s random search.
       </p>
 
       <h3>The Guarantee</h3>
@@ -161,15 +161,15 @@ result = contraction_loop(
       <h3>Where You&rsquo;d Use This</h3>
       <ul>
         <li>
-          <strong>Prompt optimization</strong> — tune, measure, feed back until
+          <strong>Prompt optimization</strong> - tune, measure, feed back until
           movement is tiny.
         </li>
         <li>
-          <strong>Model calibration</strong> — adjust thresholds toward observed
+          <strong>Model calibration</strong> - adjust thresholds toward observed
           accuracy.
         </li>
         <li>
-          <strong>Agent self-calibration</strong> — start with rough priors,
+          <strong>Agent self-calibration</strong> - start with rough priors,
           converge to measured accuracy.
         </li>
       </ul>
@@ -180,8 +180,8 @@ result = contraction_loop(
 
       <h3>The Problem</h3>
       <p>
-        Several models at 55&ndash;65% accuracy. Averaging them barely helps
-        because they fail on the same hard cases.
+        Several models at 55-65% accuracy. Averaging them barely helps because
+        they fail on the same hard cases.
       </p>
 
       <h3>The Guarantee</h3>
@@ -189,7 +189,7 @@ result = contraction_loop(
         Make each successive agent <strong>focus on what the previous ones got
         wrong</strong>. Agent 1 predicts. Its misses get more weight. Agent 2
         specializes there. Agent 3 covers what both missed. Combined error drops
-        fast &mdash; as long as each agent is a bit better than a coin flip.
+        fast - as long as each agent is a bit better than a coin flip.
       </p>
 
       <AdaBoostCascade />
@@ -210,15 +210,15 @@ prediction = ensemble.predict(new_input)
       <h3>Where You&rsquo;d Use This</h3>
       <ul>
         <li>
-          <strong>Content moderation</strong> — general filter → toxicity →
+          <strong>Content moderation</strong> - general filter → toxicity →
           context edge cases.
         </li>
         <li>
-          <strong>Multi-LLM pipelines</strong> — cheap model first; expensive
+          <strong>Multi-LLM pipelines</strong> - cheap model first; expensive
           model only on failures.
         </li>
         <li>
-          <strong>Code review agents</strong> — lint → style → security, each on
+          <strong>Code review agents</strong> - lint → style → security, each on
           prior misses.
         </li>
       </ul>
@@ -238,8 +238,8 @@ prediction = ensemble.predict(new_input)
       <h3>The Guarantee</h3>
       <p>
         Score agents so the only way to maximize the score is to report true
-        belief &mdash; no swagger, no sandbagging. Historical score becomes the
-        trust weight. The best-calibrated agent automatically gets the most say.
+        belief - no swagger, no sandbagging. Historical score becomes the trust
+        weight. The best-calibrated agent automatically gets the most say.
       </p>
 
       <h3>The Code</h3>
@@ -258,15 +258,15 @@ combined = tracker.aggregate({"gpt4": 0.75, "claude": 0.60})`}</code></pre>
       <h3>Where You&rsquo;d Use This</h3>
       <ul>
         <li>
-          <strong>Multi-model routing</strong> — weight by calibration track
+          <strong>Multi-model routing</strong> - weight by calibration track
           record, not just cost.
         </li>
         <li>
-          <strong>Expert forecasts</strong> — combine probabilities by historical
+          <strong>Expert forecasts</strong> - combine probabilities by historical
           honesty.
         </li>
         <li>
-          <strong>RAG confidence</strong> — track which retrieval strategies are
+          <strong>RAG confidence</strong> - track which retrieval strategies are
           well-calibrated.
         </li>
       </ul>
@@ -279,9 +279,9 @@ combined = tracker.aggregate({"gpt4": 0.75, "claude": 0.60})`}</code></pre>
       <p>
         You have a budget (API spend, rollout percentage, spare capacity). The
         textbook says commit a certain fraction based on expected payoff. That
-        math assumes bad outcomes are independent. In reality, failures cluster
-        &mdash; a bad week often means conditions changed, not that luck will
-        reverse tomorrow.
+        math assumes bad outcomes are independent. In reality, failures cluster.
+        A bad week often means conditions changed, not that luck will reverse
+        tomorrow.
       </p>
       <p>
         You live in one timeline. A bad streak can exhaust the budget before
@@ -290,8 +290,8 @@ combined = tracker.aggregate({"gpt4": 0.75, "claude": 0.60})`}</code></pre>
 
       <h3>The Guarantee</h3>
       <p>
-        Simulate many paths with realistic clustering. Compare the
-        <strong>typical</strong> (median) ending to the <strong>average</strong>
+        Simulate many paths with realistic clustering. Compare the{" "}
+        <strong>typical</strong> (median) ending to the <strong>average</strong>{" "}
         ending. If the typical path is only 72% as good as the average, shrink
         your commitment by that factor. You size for survival, not for the
         fantasy average universe.
@@ -314,15 +314,15 @@ result = ergodic_kelly(
       <h3>Where You&rsquo;d Use This</h3>
       <ul>
         <li>
-          <strong>API budget</strong> — how much spend on expensive models vs
+          <strong>API budget</strong> - how much spend on expensive models vs
           cheap ones when cost spikes cluster.
         </li>
         <li>
-          <strong>Feature rollout</strong> — how aggressive when early bugs cause
+          <strong>Feature rollout</strong> - how aggressive when early bugs cause
           correlated churn.
         </li>
         <li>
-          <strong>Spare capacity</strong> — how much headroom when demand spikes
+          <strong>Spare capacity</strong> - how much headroom when demand spikes
           arrive together.
         </li>
       </ul>
@@ -341,7 +341,7 @@ result = ergodic_kelly(
       <p>
         Model sources as a graph. Each node only talks to neighbors. After a few
         rounds of message passing, every node holds a belief that accounts for
-        the whole network &mdash; including nodes it never spoke to directly.
+        the whole network - including nodes it never spoke to directly.
       </p>
 
       <BeliefPropagation />
@@ -369,15 +369,15 @@ result = propagate(build_graph(agents, edges), damping=0.3)
       <h3>Where You&rsquo;d Use This</h3>
       <ul>
         <li>
-          <strong>RAG quality</strong> — relevance, authority, freshness as a
+          <strong>RAG quality</strong> - relevance, authority, freshness as a
           graph, not a flat average.
         </li>
         <li>
-          <strong>Incident diagnosis</strong> — CPU, memory, network, errors
+          <strong>Incident diagnosis</strong> - CPU, memory, network, errors
           propagate evidence to a likely root cause.
         </li>
         <li>
-          <strong>Pipeline quality</strong> — validation → processing confidence
+          <strong>Pipeline quality</strong> - validation → processing confidence
           → output coherence as linked beliefs.
         </li>
       </ul>
@@ -417,15 +417,15 @@ signals = mdl_filter(
       <h3>Where You&rsquo;d Use This</h3>
       <ul>
         <li>
-          <strong>Log analysis</strong> — keep meaningful error patterns, drop
+          <strong>Log analysis</strong> - keep meaningful error patterns, drop
           chatter.
         </li>
         <li>
-          <strong>Content curation</strong> — filter repetitive slop before
+          <strong>Content curation</strong> - filter repetitive slop before
           scoring.
         </li>
         <li>
-          <strong>Ingestion pipelines</strong> — drop noise early to cut API cost.
+          <strong>Ingestion pipelines</strong> - drop noise early to cut API cost.
         </li>
       </ul>
 

@@ -80,7 +80,7 @@ const LAYERS: readonly Layer[] = [
     ],
     verdict: "TOO SHORT",
     won: false,
-    note: "Each arm tested 12 hypotheses and each got 0 promotions — expected for a short research loop. Astra reached the same candidates with 25% fewer calls, but both its roles changed together, so this layer ranks nothing on judgment.",
+    note: "Each arm tested 12 hypotheses and each got 0 promotions - expected for a short research loop. Astra reached the same candidates with 25% fewer calls, but both its roles changed together, so this layer ranks nothing on judgment.",
   },
 ];
 

@@ -3,24 +3,24 @@ export function DualLayerRegimeContent() {
     <>
       <p>
         <strong>In one sentence:</strong> one sensor tells you what mode
-        you&rsquo;re in; another tells you you&rsquo;re leaving it. Multiply
-        them so you get cautious during transitions.
+        you&rsquo;re in. Another tells you you&rsquo;re leaving it. Multiply them
+        so you get cautious during transitions.
       </p>
 
       <h2>The Problem Every Automated System Has</h2>
       <p>
         Every system that makes decisions in a changing environment runs on
         assumptions about current conditions. A recommendation engine tuned for
-        normal browsing patterns. An autoscaler calibrated for steady growth. An
-        ML model trained on one data distribution. A content moderation pipeline
-        tuned for English text.
+        normal browsing. An autoscaler calibrated for steady growth. An ML model
+        trained on one data distribution. A content moderation pipeline tuned for
+        English text.
       </p>
       <p>
-        When conditions change, these assumptions break. The usual fix is a mode
-        classifier &mdash; something that tells you which condition you&rsquo;re
-        in so you can switch strategies. But here&rsquo;s the question nobody
-        asks: <em>&ldquo;Are we <strong>transitioning</strong> between modes
-        right now?&rdquo;</em>
+        When conditions change, those assumptions break. The usual fix is a mode
+        classifier - something that tells you which condition you&rsquo;re in so
+        you can switch strategies. But here&rsquo;s the question nobody asks:{" "}
+        <em>&ldquo;Are we <strong>transitioning</strong> between modes right
+        now?&rdquo;</em>
       </p>
       <p>
         Transitions are where the damage happens. Your classifier still says
@@ -37,35 +37,35 @@ export function DualLayerRegimeContent() {
 
       <h2>Why This Matters for You</h2>
       <p>
-        If you run any system that adapts its behavior to conditions &mdash;
-        scaling policies, model retraining triggers, feature flags, agent
-        confidence thresholds &mdash; you have this problem:
+        If you run any system that adapts its behavior to conditions (scaling
+        policies, model retraining triggers, feature flags, agent confidence
+        thresholds), you have this problem:
       </p>
       <ul>
         <li>
-          <strong>ML model monitoring</strong> &mdash; Layer 1: what distribution
-          is the data in? Layer 2: is the distribution shifting right now? Catch
-          drift 1&ndash;3 batches before accuracy drops.
+          <strong>ML model monitoring</strong> - Layer 1: what distribution is
+          the data in? Layer 2: is the distribution shifting right now? Catch
+          drift 1-3 batches before accuracy drops.
         </li>
         <li>
-          <strong>Infrastructure scaling</strong> &mdash; Layer 1: what traffic
-          pattern are we in (steady, ramp, spike)? Layer 2: are we transitioning?
-          Scale conservatively during transitions instead of overcommitting.
+          <strong>Infrastructure scaling</strong> - Layer 1: what traffic pattern
+          are we in (steady, ramp, spike)? Layer 2: are we transitioning? Scale
+          carefully during transitions instead of overcommitting.
         </li>
         <li>
-          <strong>A/B tests and feature flags</strong> &mdash; Layer 1: what user
+          <strong>A/B tests and feature flags</strong> - Layer 1: what user
           behavior mode are we in? Layer 2: did conditions just change under the
           test? Pause during transitions.
         </li>
         <li>
-          <strong>Autonomous agents</strong> &mdash; Layer 1: how hard is the
-          task right now? Layer 2: did difficulty just shift? Lower confidence
-          before the agent overcommits.
+          <strong>Autonomous agents</strong> - Layer 1: how hard is the task
+          right now? Layer 2: did difficulty just shift? Lower confidence before
+          the agent overcommits.
         </li>
         <li>
-          <strong>Alerting systems</strong> &mdash; Layer 1: what&rsquo;s the
-          baseline error rate? Layer 2: is the baseline itself changing? Prevents
-          alert fatigue from threshold drift.
+          <strong>Alerting systems</strong> - Layer 1: what&rsquo;s the baseline
+          error rate? Layer 2: is the baseline itself changing? Prevents alert
+          fatigue from threshold drift.
         </li>
       </ul>
 
@@ -88,15 +88,15 @@ export function DualLayerRegimeContent() {
 # Up 5, down 5 repeatedly:    0/10 = 0.0   → CHAOS (pure noise)
 # Slow drift up of 3 total:   3/12 = 0.25  → STEADY`}</code></pre>
       <p>
-        This works for any time series &mdash; server response times, user
-        engagement, error rates, model accuracy, request latency. If you can plot
-        it on a line chart, you can compute it.
+        This works for any time series - server response times, user engagement,
+        error rates, model accuracy, request latency. If you can plot it on a
+        line chart, you can compute it.
       </p>
 
       <h3>Why Five Tiers Instead of Two</h3>
       <p>
         Binary classification (signal vs noise) throws away information. Five
-        graduated tiers let you respond proportionally:
+        graduated tiers let you respond in steps:
       </p>
       <table>
         <thead>
@@ -116,7 +116,7 @@ export function DualLayerRegimeContent() {
           </tr>
           <tr>
             <td><code>STEADY</code></td>
-            <td>0.20 &ndash; 0.35</td>
+            <td>0.20 - 0.35</td>
             <td>85%</td>
             <td>Some direction but noisy. Slightly cautious.</td>
           </tr>
@@ -128,7 +128,7 @@ export function DualLayerRegimeContent() {
           </tr>
           <tr>
             <td><code>NOISY</code></td>
-            <td>0.10 &ndash; 0.20</td>
+            <td>0.10 - 0.20</td>
             <td>60%</td>
             <td>Mostly noise. Block optimistic actions entirely.</td>
           </tr>
@@ -143,11 +143,11 @@ export function DualLayerRegimeContent() {
 
       <h3>Defensive Actions Survive Noise; Optimistic Ones Don&rsquo;t</h3>
       <p>
-        In production data, <strong>defensive actions still work in noisy modes;
-        optimistic ones don&rsquo;t</strong>. Urgency cuts through noise. Hope
+        In production data, <strong>defensive actions still work in noisy modes.
+        Optimistic ones don&rsquo;t</strong>. Urgency cuts through noise. Hope
         doesn&rsquo;t. So in <code>NOISY</code>, you can still act on
-        &ldquo;something is wrong&rdquo; signals &mdash; but you block
-        &ldquo;this looks like an opportunity&rdquo; signals.
+        &ldquo;something is wrong&rdquo; signals - but you block &ldquo;this
+        looks like an opportunity&rdquo; signals.
       </p>
       <pre><code>{`MODE_CONFIG = {
     "CLEAR":  {"confidence": 1.0,  "confirms": 1},
@@ -178,16 +178,16 @@ export function DualLayerRegimeContent() {
       </p>
       <ul>
         <li>
-          <strong>Level detector</strong> (more sensitive) &mdash; catches shifts
-          in the mean.
+          <strong>Level detector</strong> (more sensitive) - catches shifts in
+          the mean.
         </li>
         <li>
-          <strong>Variance detector</strong> (less sensitive) &mdash; catches
-          shifts in the spread.
+          <strong>Variance detector</strong> (less sensitive) - catches shifts in
+          the spread.
         </li>
       </ul>
 
-      <h3>Don&rsquo;t Flip Instantly &mdash; Ramp Confidence Back Up</h3>
+      <h3>Don&rsquo;t Flip Instantly - Ramp Confidence Back Up</h3>
       <p>
         When a shift fires, don&rsquo;t instantly switch behavior. Cut trust to
         60%, then ramp back to 100% over a few data points:
@@ -202,7 +202,7 @@ export function DualLayerRegimeContent() {
         return 1.0                                      # stable again`}</code></pre>
       <p>
         <strong>The transition period is the most dangerous time</strong>. Old
-        assumptions are stale; the new mode isn&rsquo;t confirmed yet. Reducing
+        assumptions are stale. The new mode isn&rsquo;t confirmed yet. Reducing
         confidence here prevents the biggest mistakes.
       </p>
 
@@ -210,8 +210,8 @@ export function DualLayerRegimeContent() {
 
       <h2>How the Two Layers Compose</h2>
       <p>
-        Multiply the two scores. They stay independent &mdash; neither needs to
-        know about the other:
+        Multiply the two scores. They stay independent. Neither needs to know
+        about the other:
       </p>
       <pre><code>{`# Layer 1: what mode are we in? → base confidence
 mode = classify_mode(useful_ratio, variance_percentile)
@@ -229,7 +229,7 @@ effective_confidence = base_confidence * transition_mod`}</code></pre>
 # Time T (drift detected):
 #   Layer 1 still says STEADY     → base = 0.85
 #   Layer 2 says "something changed" → mod = 0.60
-#   Effective: 0.85 × 0.60 = 0.51  (conservative — good)
+#   Effective: 0.85 × 0.60 = 0.51  (conservative - good)
 
 # Time T+1:
 #   Layer 1 still STEADY          → base = 0.85
@@ -244,9 +244,9 @@ effective_confidence = base_confidence * transition_mod`}</code></pre>
 # Time T+4:
 #   Both settled                  → 1.0 × 1.0 = 1.0`}</code></pre>
       <p>
-        You end up most conservative when it matters most: during transitions in
-        noisy conditions. And most confident when conditions are stable and
-        clear. No manual rules needed &mdash; it falls out of the multiplication.
+        You end up most careful when it matters most: during transitions in noisy
+        conditions. And most confident when conditions are stable and clear. No
+        manual rules needed. It falls out of the multiplication.
       </p>
 
       <hr />
@@ -254,7 +254,7 @@ effective_confidence = base_confidence * transition_mod`}</code></pre>
       <h2>How to Apply This to Your System</h2>
       <ol>
         <li>
-          <strong>Pick a health metric</strong> &mdash; latency, model accuracy,
+          <strong>Pick a health metric</strong> - latency, model accuracy,
           engagement, error rate.
         </li>
         <li>
@@ -266,9 +266,9 @@ effective_confidence = base_confidence * transition_mod`}</code></pre>
           early warning before the mode classifier catches up.
         </li>
         <li>
-          <strong>Multiply the two</strong> and use the combined score to
-          modulate behavior &mdash; scaling aggressiveness, alert thresholds,
-          retraining triggers, agent autonomy.
+          <strong>Multiply the two</strong> and use the combined score to adjust
+          behavior - scaling aggressiveness, alert thresholds, retraining
+          triggers, agent autonomy.
         </li>
       </ol>
 
@@ -281,26 +281,26 @@ effective_confidence = base_confidence * transition_mod`}</code></pre>
       </p>
       <ul>
         <li>
-          <strong>Fewer bad calls during noisy periods</strong> &mdash; blocking
+          <strong>Fewer bad calls during noisy periods</strong> - blocking
           optimistic actions when the useful-movement ratio is low stopped the
           worst overcommits.
         </li>
         <li>
-          <strong>Earlier caution on transitions</strong> &mdash; the drift layer
-          usually fired 1&ndash;3 points before the mode classifier renamed the
+          <strong>Earlier caution on transitions</strong> - the drift layer
+          usually fired 1-3 points before the mode classifier renamed the
           regime, which is exactly the window where old rules hurt most.
         </li>
         <li>
-          <strong>Clearer behavior when conditions are stable</strong> &mdash;
-          once both layers settled, the system stopped second-guessing itself and
+          <strong>Clearer behavior when conditions are stable</strong> - once
+          both layers settled, the system stopped second-guessing itself and
           acted at full confidence.
         </li>
       </ul>
       <blockquote>
         <p>
-          The dual-layer detector is the foundation other decisions build on
-          &mdash; action selection, resource allocation, and safety margins all
-          adapt from the combined confidence score.
+          The dual-layer detector is the foundation other decisions build on.
+          Action selection, resource allocation, and safety margins all adapt
+          from the combined confidence score.
         </p>
       </blockquote>
     </>

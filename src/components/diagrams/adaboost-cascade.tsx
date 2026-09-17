@@ -54,10 +54,10 @@ const ROUNDS: readonly RoundData[] = [
 ];
 
 const ROUND_LABELS = [
-  "INITIAL — all agents untrained, equal error",
-  "ROUND 1 — content_filter trained, baseline established",
-  "ROUND 2 — toxicity_model focuses on content_filter's misses",
-  "ROUND 3 — context_checker specializes in remaining errors",
+  "INITIAL - all agents untrained, equal error",
+  "ROUND 1 - content_filter trained, baseline established",
+  "ROUND 2 - toxicity_model focuses on content_filter's misses",
+  "ROUND 3 - context_checker specializes in remaining errors",
 ] as const;
 
 export function AdaBoostCascade() {
