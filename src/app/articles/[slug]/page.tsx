@@ -9,8 +9,10 @@ import { DualLayerRegimeContent } from "@/lib/articles/dual-layer-regime";
 import { VpinConvictionContent } from "@/lib/articles/vpin-conviction";
 import { ProductionAgentsContent } from "@/lib/articles/production-agents";
 import { AstraFieldTestContent } from "@/lib/articles/astra-field-test";
+import { MemoryThreeJobsContent } from "@/lib/articles/memory-three-jobs";
 
 const CONTENT_MAP: Record<string, React.ComponentType> = {
+  "memory-three-jobs": MemoryThreeJobsContent,
   "astra-field-test": AstraFieldTestContent,
   "production-agents": ProductionAgentsContent,
   "control-hierarchy": ControlHierarchyContent,

@@ -8,9 +8,15 @@ interface DiagramShellProps {
   readonly title: string;
   readonly children: React.ReactNode;
   readonly className?: string;
+  readonly interactive?: boolean;
 }
 
-export function DiagramShell({ title, children, className }: DiagramShellProps) {
+export function DiagramShell({
+  title,
+  children,
+  className,
+  interactive = true,
+}: DiagramShellProps) {
   return (
     <div
       className={cn(
@@ -22,9 +28,15 @@ export function DiagramShell({ title, children, className }: DiagramShellProps) 
         <span className="font-mono text-sm tracking-wider text-waste-amber">
           {title}
         </span>
-        <span className="rounded border border-waste-amber/30 bg-waste-amber/10 px-2 py-0.5 font-mono text-[0.6rem] tracking-widest text-waste-amber/70">
-          INTERACTIVE
-        </span>
+        {interactive ? (
+          <span className="rounded border border-waste-amber/30 bg-waste-amber/10 px-2 py-0.5 font-mono text-[0.6rem] tracking-widest text-waste-amber/70">
+            INTERACTIVE
+          </span>
+        ) : (
+          <span className="rounded border border-waste-border bg-waste-bg/40 px-2 py-0.5 font-mono text-[0.6rem] tracking-widest text-waste-dim">
+            VALUE MAP
+          </span>
+        )}
       </div>
       <div className="p-4 sm:p-6">{children}</div>
     </div>

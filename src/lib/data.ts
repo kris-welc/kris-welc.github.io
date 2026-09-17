@@ -117,6 +117,39 @@ export const PROJECTS: readonly Project[] = [
 
 export const ARTICLES: readonly Article[] = [
   {
+    id: "memory-three-jobs",
+    slug: "memory-three-jobs",
+    date: "2026-09-17",
+    title: "Agent Memory Is Three Jobs, Not One Database",
+    hook: "Agents do not need more memory. They need memory that cannot confuse what was said, what happened, and what turned out true. One mixed store makes wrong guesses look like knowledge. Three contracts fix that.",
+    tags: ["Agent Memory", "System Design", "Calibration"],
+    accent: "amber",
+    readTime: "5 min",
+    topicCount: 4,
+    topics: [
+      {
+        title: "The Expensive Mix-Up",
+        summary:
+          "Chat history plus embeddings treats a guess and a verified outcome the same. You paid for a world model and got a scrapbook.",
+      },
+      {
+        title: "Timeline, Lessons, Scoreboard",
+        summary:
+          "Events answer what moved. Lessons reuse edges and failures. The scoreboard only promotes after reality checks the claim.",
+      },
+      {
+        title: "Mem0 as Lessons",
+        summary:
+          "Mem0 (mem0.ai) stores short reusable facts across sessions. Use it for edges, failures, and risk limits after verification - not as a dump of every chat turn.",
+      },
+      {
+        title: "The Gate Is the Product",
+        summary:
+          "Unverified text never becomes weight. Authority follows who was right, not who sounded sure.",
+      },
+    ],
+  },
+  {
     id: "astra-field-test",
     slug: "astra-field-test",
     date: "2026-09-06",
