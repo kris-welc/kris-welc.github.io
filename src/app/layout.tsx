@@ -25,12 +25,12 @@ const shareTechMono = Share_Tech_Mono({
 
 const SITE_URL = "https://kris-welc.github.io";
 const SITE_DESCRIPTION =
-  "Field notes on autonomous systems, quantitative research, and agent architectures — measured, not demoed.";
+  "Field notes on AI agents and adaptive systems that hold up outside a demo. Patterns, numbers, and setups you can reuse.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Kris Welc — Dispatches",
+    default: "Kris Welc",
     template: "%s | Kris Welc",
   },
   description: SITE_DESCRIPTION,
@@ -38,14 +38,14 @@ export const metadata: Metadata = {
   creator: "Kris Welc",
   openGraph: {
     type: "website",
-    siteName: "Kris Welc — Dispatches",
+    siteName: "Kris Welc",
     url: SITE_URL,
-    title: "Kris Welc — Dispatches",
+    title: "Kris Welc",
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kris Welc — Dispatches",
+    title: "Kris Welc",
     description: SITE_DESCRIPTION,
   },
 };
@@ -61,7 +61,10 @@ export default function RootLayout({
         className={`${chakraPetch.variable} ${rajdhani.variable} ${shareTechMono.variable} antialiased vignette min-h-screen`}
       >
         <ErrorSuppressor />
-        <div className="wasteland-bg" aria-hidden="true" />
+        <div className="wasteland-bg" aria-hidden="true">
+          <div className="wasteland-grid" />
+          <div className="wasteland-grid-floor" />
+        </div>
         <Providers>
           <Nav />
           {children}

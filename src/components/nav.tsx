@@ -15,7 +15,7 @@ export function Nav() {
           href="/"
           className="glow-amber font-mono text-sm tracking-[0.2em] text-waste-amber"
         >
-          DISPATCHES
+          KRIS WELC
         </Link>
         <Link
           href="/#articles"
@@ -26,7 +26,7 @@ export function Nav() {
               : "text-waste-dim hover:text-waste-bone"
           )}
         >
-          ALL
+          NOTES
         </Link>
       </div>
     </nav>

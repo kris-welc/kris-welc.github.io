@@ -9,7 +9,7 @@ export function ArticlesSection() {
   const { getStats } = useArticleStats();
 
   return (
-    <section id="articles" className="relative min-h-screen px-6 pt-28 pb-24">
+    <section id="articles" className="relative px-6 pt-16 pb-24">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12">
           <SectionLabel code="SEC_01" label="FIELD NOTES" />
@@ -17,7 +17,7 @@ export function ArticlesSection() {
             Dispatches
           </h2>
           <p className="mt-3 max-w-2xl text-waste-sand">
-            Patterns worth knowing. Expand any piece to see the full breakdown.
+            Expand any piece for the full breakdown.
           </p>
         </div>
 

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const dynamic = "force-static";
-export const alt = "Kris Welc — Dispatches";
+export const alt = "Kris Welc";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -29,7 +29,7 @@ export default function Image() {
             color: "#e5a21a",
           }}
         >
-          DISPATCHES
+          KRIS WELC
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
@@ -42,7 +42,7 @@ export default function Image() {
               letterSpacing: -2,
             }}
           >
-            Kris Welc
+            Field notes that hold up
           </div>
           <div
             style={{
@@ -53,8 +53,8 @@ export default function Image() {
               lineHeight: 1.35,
             }}
           >
-            Autonomous systems, quantitative research, agent architectures —
-            measured, not demoed.
+            AI agents and adaptive systems outside the demo. Patterns, numbers,
+            and setups you can reuse.
           </div>
         </div>
 

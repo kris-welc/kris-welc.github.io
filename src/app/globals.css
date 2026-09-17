@@ -99,19 +99,120 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
   background:
-    /* Warm amber glow — top-left, like a distant fire */
+    /* Warm amber glow - top-left, like a distant fire */
     radial-gradient(ellipse 80% 60% at 15% 20%, rgba(229, 162, 26, 0.06) 0%, transparent 60%),
-    /* Rust embers — bottom-right corner */
+    /* Rust embers - bottom-right corner */
     radial-gradient(ellipse 60% 50% at 85% 80%, rgba(197, 42, 42, 0.04) 0%, transparent 55%),
-    /* Toxic haze — center-right, subtle green fog */
+    /* Toxic haze - center-right, subtle green fog */
     radial-gradient(ellipse 50% 70% at 70% 35%, rgba(154, 224, 42, 0.025) 0%, transparent 50%),
-    /* Deep amber wash — center horizon */
+    /* Deep amber wash - center horizon */
     radial-gradient(ellipse 120% 40% at 50% 55%, rgba(229, 162, 26, 0.035) 0%, transparent 70%),
     /* Subtle warm fog across bottom */
     radial-gradient(ellipse 100% 30% at 50% 100%, rgba(201, 188, 158, 0.03) 0%, transparent 70%),
     /* Base darkness */
     #0a0908;
+}
+
+/* Fine tactical grid - drifts slowly behind content */
+.wasteland-grid {
+  position: absolute;
+  inset: -10%;
+  background-image:
+    linear-gradient(rgba(229, 162, 26, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(229, 162, 26, 0.09) 1px, transparent 1px),
+    linear-gradient(rgba(50, 44, 30, 0.45) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(50, 44, 30, 0.45) 1px, transparent 1px);
+  background-size:
+    96px 96px,
+    96px 96px,
+    24px 24px,
+    24px 24px;
+  mask-image: radial-gradient(
+    ellipse 75% 60% at 50% 32%,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.4) 45%,
+    transparent 78%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 75% 60% at 50% 32%,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.4) 45%,
+    transparent 78%
+  );
+  animation: grid-drift 48s linear infinite;
+}
+
+/* Perspective floor grid - moves toward the horizon */
+.wasteland-grid-floor {
+  position: absolute;
+  left: -40%;
+  right: -40%;
+  bottom: -8%;
+  height: 58%;
+  background-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(229, 162, 26, 0.06) 8%,
+      transparent 9%
+    ),
+    linear-gradient(90deg, rgba(229, 162, 26, 0.14) 1px, transparent 1px),
+    linear-gradient(rgba(229, 162, 26, 0.11) 1px, transparent 1px);
+  background-size:
+    100% 48px,
+    64px 64px,
+    64px 64px;
+  transform: perspective(520px) rotateX(58deg);
+  transform-origin: center top;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.65) 22%,
+    rgba(0, 0, 0, 0.4) 55%,
+    transparent 92%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.65) 22%,
+    rgba(0, 0, 0, 0.4) 55%,
+    transparent 92%
+  );
+  animation: grid-advance 22s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes grid-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-96px, -96px, 0);
+  }
+}
+
+@keyframes grid-advance {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      0 48px,
+      0 64px,
+      0 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wasteland-grid,
+  .wasteland-grid-floor {
+    animation: none;
+  }
 }
 
 /* Ensure main content sits above atmospheric background */
