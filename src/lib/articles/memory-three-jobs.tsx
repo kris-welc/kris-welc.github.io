@@ -1,4 +1,5 @@
 import { MemoryThreeJobsDiagram } from "@/components/diagrams/memory-three-jobs";
+import { MemoryGateDemo } from "@/components/diagrams/memory-gate-demo";
 
 export function MemoryThreeJobsContent() {
   return (
@@ -22,6 +23,16 @@ export function MemoryThreeJobsContent() {
       </p>
 
       <MemoryThreeJobsDiagram />
+
+      <h2>Try It (No Live Agent)</h2>
+      <p>
+        Walk the gate end to end. You will pick what was produced, choose one
+        bucket vs three jobs, and (for claims) open or close the verification
+        gate. The point is to feel why unverified text must not become reusable
+        memory.
+      </p>
+
+      <MemoryGateDemo />
 
       <h2>Three Jobs, Three Contracts</h2>
       <p>
